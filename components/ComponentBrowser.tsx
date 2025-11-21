@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Search, Grid, List, Heart, Download, Copy, Eye, X } from "lucide-react"
 import { useLocale } from "@/contexts/LocaleContext"
 import { type Component, componentCategories, getComponentLibrary } from "@/lib/component-library"
@@ -25,20 +25,12 @@ export default function ComponentBrowser({ onSelectComponent }: ComponentBrowser
   const [selectedComponent, setSelectedComponent] = useState<Component | null>(null)
   const [showPreview, setShowPreview] = useState(false)
 
-  useEffect(() => {
-    loadComponents()
-  }, [])
-
-  useEffect(() => {
-    filterAndSortComponents()
-  }, [components, selectedCategory, searchQuery, sortBy])
-
-  const loadComponents = () => {
+  const loadComponents = useCallback(() => {
     const allComponents = library.getAllComponents()
     setComponents(allComponents)
-  }
+  }, [library])
 
-  const filterAndSortComponents = () => {
+  const filterAndSortComponents = useCallback(() => {
     let filtered = components
 
     // 按分类过滤
@@ -66,7 +58,15 @@ export default function ComponentBrowser({ onSelectComponent }: ComponentBrowser
     })
 
     setFilteredComponents(filtered)
-  }
+  }, [components, selectedCategory, searchQuery, sortBy, library])
+
+  useEffect(() => {
+    loadComponents()
+  }, [loadComponents])
+
+  useEffect(() => {
+    filterAndSortComponents()
+  }, [filterAndSortComponents])
 
   const handleCopyCode = async (component: Component) => {
     await navigator.clipboard.writeText(component.code)
