@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -19,14 +19,14 @@ export default function FileExplorer({ projectId, onFileSelect }: FileExplorerPr
   const [newFileName, setNewFileName] = useState("")
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set(["/"]))
 
-  useEffect(() => {
-    loadProject()
-  }, [projectId, loadProject])
-
-  const loadProject = () => {
+  const loadProject = useCallback(() => {
     const proj = workspaceManager.getProject(projectId)
     setProject(proj || null)
-  }
+  }, [projectId])
+
+  useEffect(() => {
+    loadProject()
+  }, [loadProject])
 
   const createFile = () => {
     if (!newFileName.trim() || !project) return

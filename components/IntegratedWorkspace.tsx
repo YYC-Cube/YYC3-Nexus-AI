@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -28,14 +28,7 @@ console.log(greet("World"))`)
   const [learningProgress, setLearningProgress] = useState<any>(null)
 
   // 实时分析代码
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      analyzeCode()
-    }, 1000)
-    return () => clearTimeout(timer)
-  }, [code, language, analyzeCode])
-
-  const analyzeCode = async () => {
+  const analyzeCode = useCallback(async () => {
     setIsAnalyzing(true)
     try {
       const result = await aiIntegrationBridge.analyzeCodeForLearning(code, language)
@@ -49,7 +42,14 @@ console.log(greet("World"))`)
     } finally {
       setIsAnalyzing(false)
     }
-  }
+  }, [code, language])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      analyzeCode()
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [analyzeCode])
 
   const executeCode = async () => {
     try {

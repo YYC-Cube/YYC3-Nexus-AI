@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Clock, RotateCcw, Trash2, Download, Upload, GitBranch, Plus, Minus } from "lucide-react"
 import { useLocale } from "@/contexts/LocaleContext"
 import { type CodeVersion, getVersionControl } from "@/lib/version-control"
@@ -17,14 +17,14 @@ export default function VersionHistory({ fileId, currentContent, onRestore }: Ve
   const [selectedVersion, setSelectedVersion] = useState<CodeVersion | null>(null)
   const versionControl = getVersionControl()
 
-  useEffect(() => {
-    loadVersions()
-  }, [fileId, loadVersions])
-
-  const loadVersions = () => {
+  const loadVersions = useCallback(() => {
     const fileVersions = versionControl.getVersions(fileId)
     setVersions(fileVersions)
-  }
+  }, [fileId, versionControl])
+
+  useEffect(() => {
+    loadVersions()
+  }, [loadVersions])
 
   const handleSaveVersion = () => {
     const message = prompt("版本说明 (可选)")

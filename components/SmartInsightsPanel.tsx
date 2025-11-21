@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Lightbulb, TrendingUp, AlertTriangle, Zap, ChevronRight } from "lucide-react"
 import { bigDataInsights, type DataDrivenInsight } from "@/lib/big-data-insights"
 import { learningTracker } from "@/lib/learning-tracker"
@@ -10,11 +10,7 @@ export default function SmartInsightsPanel({ currentTopic }: { currentTopic?: st
   const [recommendations, setRecommendations] = useState<string[]>([])
   const [topTrends, setTopTrends] = useState<any[]>([])
 
-  useEffect(() => {
-    loadInsights()
-  }, [currentTopic, loadInsights])
-
-  const loadInsights = () => {
+  const loadInsights = useCallback(() => {
     const progress = learningTracker.getProgress()
     const topic = currentTopic || "编程"
 
@@ -34,7 +30,11 @@ export default function SmartInsightsPanel({ currentTopic }: { currentTopic?: st
     // 获取热门趋势
     const trends = bigDataInsights.getTopTrends(3)
     setTopTrends(trends)
-  }
+  }, [currentTopic])
+
+  useEffect(() => {
+    loadInsights()
+  }, [loadInsights])
 
   const getInsightIcon = (type: string) => {
     switch (type) {

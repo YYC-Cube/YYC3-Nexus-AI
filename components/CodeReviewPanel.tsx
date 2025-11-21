@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -25,18 +25,7 @@ export default function CodeReviewPanel({ code, language, onApplyFix }: CodeRevi
   const [reviewHistory, setReviewHistory] = useState<ReviewHistory[]>([])
   const [learningStats, setLearningStats] = useState<{ patternsLearned: number; accuracy: number } | null>(null)
 
-  useEffect(() => {
-    if (code.trim()) {
-      performReview()
-    }
-  }, [code, language, performReview])
-
-  useEffect(() => {
-    loadReviewHistory()
-    loadLearningStats()
-  }, [])
-
-  const performReview = async () => {
+  const performReview = useCallback(async () => {
     setIsReviewing(true)
     try {
       const result = await codeReviewAI.reviewCode(code, language)
@@ -47,7 +36,18 @@ export default function CodeReviewPanel({ code, language, onApplyFix }: CodeRevi
     } finally {
       setIsReviewing(false)
     }
-  }
+  }, [code, language])
+
+  useEffect(() => {
+    if (code.trim()) {
+      performReview()
+    }
+  }, [code, performReview])
+
+  useEffect(() => {
+    loadReviewHistory()
+    loadLearningStats()
+  }, [])
 
   const handleAutoFixAll = async () => {
     if (!review || !onApplyFix) return

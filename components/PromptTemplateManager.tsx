@@ -3,7 +3,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -41,21 +41,7 @@ export default function PromptTemplateManager() {
     loadStatistics()
   }, [])
 
-  useEffect(() => {
-    filterTemplates()
-  }, [templates, selectedCategory, searchQuery, filterTemplates])
-
-  const loadTemplates = () => {
-    const allTemplates = promptEngineeringManager.getAllTemplates()
-    setTemplates(allTemplates)
-  }
-
-  const loadStatistics = () => {
-    const stats = promptEngineeringManager.getStatistics()
-    setStatistics(stats)
-  }
-
-  const filterTemplates = () => {
+  const filterTemplates = useCallback(() => {
     let filtered = templates
 
     if (selectedCategory !== "all") {
@@ -67,6 +53,20 @@ export default function PromptTemplateManager() {
     }
 
     setFilteredTemplates(filtered)
+  }, [templates, selectedCategory, searchQuery])
+
+  useEffect(() => {
+    filterTemplates()
+  }, [filterTemplates])
+
+  const loadTemplates = () => {
+    const allTemplates = promptEngineeringManager.getAllTemplates()
+    setTemplates(allTemplates)
+  }
+
+  const loadStatistics = () => {
+    const stats = promptEngineeringManager.getStatistics()
+    setStatistics(stats)
   }
 
   const handleSelectTemplate = (template: PromptTemplate) => {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import { RefreshCw, Maximize2, Minimize2, Monitor, Smartphone, Tablet, AlertCircle } from "lucide-react"
 import { useLocale } from "@/contexts/LocaleContext"
 import { generatePreviewHTML } from "@/lib/preview-manager"
@@ -28,16 +28,7 @@ export default function LivePreview({ code, language, autoRefresh = true }: Live
     mobile: { width: "375px", height: "667px" },
   }
 
-  useEffect(() => {
-    if (autoRefresh) {
-      const timer = setTimeout(() => {
-        refreshPreview()
-      }, 500)
-      return () => clearTimeout(timer)
-    }
-  }, [code, autoRefresh, refreshPreview])
-
-  const refreshPreview = () => {
+  const refreshPreview = useCallback(() => {
     setIsRefreshing(true)
     setError(null)
 
@@ -62,7 +53,16 @@ export default function LivePreview({ code, language, autoRefresh = true }: Live
       setError(err instanceof Error ? err.message : "预览生成失败")
       setIsRefreshing(false)
     }
-  }
+  }, [code, language])
+
+  useEffect(() => {
+    if (autoRefresh) {
+      const timer = setTimeout(() => {
+        refreshPreview()
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [autoRefresh, refreshPreview])
 
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen)

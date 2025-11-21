@@ -1,7 +1,7 @@
 // 技术栈框架模板库组件
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
@@ -38,16 +38,7 @@ export default function TemplateLibrary() {
     loadTemplates()
   }, [])
 
-  useEffect(() => {
-    filterTemplates()
-  }, [templates, selectedCategory, selectedComplexity, searchQuery, filterTemplates])
-
-  const loadTemplates = () => {
-    const allTemplates = templateLibraryManager.getAllTemplates()
-    setTemplates(allTemplates)
-  }
-
-  const filterTemplates = () => {
+  const filterTemplates = useCallback(() => {
     let filtered = templates
 
     if (selectedCategory !== "all") {
@@ -63,6 +54,15 @@ export default function TemplateLibrary() {
     }
 
     setFilteredTemplates(filtered)
+  }, [templates, selectedCategory, selectedComplexity, searchQuery])
+
+  useEffect(() => {
+    filterTemplates()
+  }, [filterTemplates])
+
+  const loadTemplates = () => {
+    const allTemplates = templateLibraryManager.getAllTemplates()
+    setTemplates(allTemplates)
   }
 
   const handleSelectTemplate = (template: FrameworkTemplate) => {
