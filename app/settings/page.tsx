@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import {
   User,
   Globe,
@@ -153,9 +154,11 @@ export default function SettingsPage() {
                   />
                   {profileAvatar && (
                     <div className="mt-2">
-                      <img
+                      <Image
                         src={profileAvatar || "/placeholder.svg"}
                         alt="头像预览"
+                        width={64}
+                        height={64}
                         className="w-16 h-16 rounded-full"
                       />
                     </div>

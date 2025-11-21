@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { User, Globe, Palette, Crown, LogOut, ChevronRight, Check, Moon, Sun, Monitor } from "lucide-react"
 import { authManager, type User as UserType } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
@@ -177,9 +178,11 @@ export default function SettingsDialog({ open, onOpenChange }: SettingsDialogPro
                     />
                     {profileAvatar && (
                       <div className="mt-2">
-                        <img
+                        <Image
                           src={profileAvatar || "/placeholder.svg"}
                           alt="头像预览"
+                          width={64}
+                          height={64}
                           className="w-16 h-16 rounded-full"
                         />
                       </div>
