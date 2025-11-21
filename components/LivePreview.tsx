@@ -35,7 +35,7 @@ export default function LivePreview({ code, language, autoRefresh = true }: Live
       }, 500)
       return () => clearTimeout(timer)
     }
-  }, [code, autoRefresh])
+  }, [code, autoRefresh, refreshPreview])
 
   const refreshPreview = () => {
     setIsRefreshing(true)

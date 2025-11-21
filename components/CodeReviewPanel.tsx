@@ -29,7 +29,7 @@ export default function CodeReviewPanel({ code, language, onApplyFix }: CodeRevi
     if (code.trim()) {
       performReview()
     }
-  }, [code, language])
+  }, [code, language, performReview])
 
   useEffect(() => {
     loadReviewHistory()

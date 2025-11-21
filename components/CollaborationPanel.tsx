@@ -21,7 +21,7 @@ export default function CollaborationPanel({ sessionId, onInvite }: Collaboratio
       const currentSession = manager.getSession(sessionId)
       setSession(currentSession)
     }
-  }, [sessionId])
+  }, [sessionId, manager])
 
   const handleCreateSession = () => {
     const name = prompt("会话名称")

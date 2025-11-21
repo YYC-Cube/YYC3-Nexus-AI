@@ -40,7 +40,7 @@ export default function TemplateLibrary() {
 
   useEffect(() => {
     filterTemplates()
-  }, [templates, selectedCategory, selectedComplexity, searchQuery])
+  }, [templates, selectedCategory, selectedComplexity, searchQuery, filterTemplates])
 
   const loadTemplates = () => {
     const allTemplates = templateLibraryManager.getAllTemplates()

@@ -68,7 +68,7 @@ export default function CodePlayground() {
       executor.destroy()
       previewManager.destroy()
     }
-  }, [])
+  }, [executor, previewManager])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -78,7 +78,7 @@ export default function CodePlayground() {
     }, 60000)
 
     return () => clearInterval(timer)
-  }, [activeFile])
+  }, [activeFile, versionControl])
 
   const handleFileChange = (content: string) => {
     setFiles((prev) => prev.map((f) => (f.id === activeFileId ? { ...f, content } : f)))

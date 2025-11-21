@@ -27,11 +27,11 @@ export default function ComponentBrowser({ onSelectComponent }: ComponentBrowser
 
   useEffect(() => {
     loadComponents()
-  }, [])
+  }, [loadComponents])
 
   useEffect(() => {
     filterAndSortComponents()
-  }, [components, selectedCategory, searchQuery, sortBy])
+  }, [components, selectedCategory, searchQuery, sortBy, filterAndSortComponents])
 
   const loadComponents = () => {
     const allComponents = library.getAllComponents()

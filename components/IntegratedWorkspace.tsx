@@ -33,7 +33,7 @@ console.log(greet("World"))`)
       analyzeCode()
     }, 1000)
     return () => clearTimeout(timer)
-  }, [code, language])
+  }, [code, language, analyzeCode])
 
   const analyzeCode = async () => {
     setIsAnalyzing(true)

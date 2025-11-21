@@ -19,7 +19,7 @@ export default function VersionHistory({ fileId, currentContent, onRestore }: Ve
 
   useEffect(() => {
     loadVersions()
-  }, [fileId])
+  }, [fileId, loadVersions])
 
   const loadVersions = () => {
     const fileVersions = versionControl.getVersions(fileId)

@@ -21,7 +21,7 @@ export default function FileExplorer({ projectId, onFileSelect }: FileExplorerPr
 
   useEffect(() => {
     loadProject()
-  }, [projectId])
+  }, [projectId, loadProject])
 
   const loadProject = () => {
     const proj = workspaceManager.getProject(projectId)

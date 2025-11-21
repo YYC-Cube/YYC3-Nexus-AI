@@ -25,7 +25,7 @@ export default function AIConfig() {
     const providers = unifiedAI.getAvailableProviders()
     setAvailableProviders(providers)
     updateModels(config.provider)
-  }, [])
+  }, [config.provider])
 
   const updateModels = (provider: AIProvider) => {
     const modelList = unifiedAI.getModelsForProvider(provider)

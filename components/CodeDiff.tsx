@@ -17,7 +17,7 @@ export default function CodeDiff({ oldContent, newContent, oldLabel = "旧版本
 
   const diff = useMemo(() => {
     return versionControl.compareVersions(oldContent, newContent)
-  }, [oldContent, newContent])
+  }, [oldContent, newContent, versionControl])
 
   const stats = useMemo(() => {
     const additions = diff.filter((d) => d.type === "add").length

@@ -43,7 +43,7 @@ export default function PromptTemplateManager() {
 
   useEffect(() => {
     filterTemplates()
-  }, [templates, selectedCategory, searchQuery])
+  }, [templates, selectedCategory, searchQuery, filterTemplates])
 
   const loadTemplates = () => {
     const allTemplates = promptEngineeringManager.getAllTemplates()

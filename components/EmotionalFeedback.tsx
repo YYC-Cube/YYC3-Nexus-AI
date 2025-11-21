@@ -17,7 +17,7 @@ export default function EmotionalFeedback({ messages, recentErrors, sessionDurat
 
   useEffect(() => {
     analyzeEmotion()
-  }, [messages, recentErrors])
+  }, [messages, recentErrors, analyzeEmotion])
 
   const analyzeEmotion = () => {
     const state = emotionalIntelligence.detectEmotion(messages, recentErrors, sessionDuration)

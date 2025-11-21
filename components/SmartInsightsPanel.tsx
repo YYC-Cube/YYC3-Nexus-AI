@@ -12,7 +12,7 @@ export default function SmartInsightsPanel({ currentTopic }: { currentTopic?: st
 
   useEffect(() => {
     loadInsights()
-  }, [currentTopic])
+  }, [currentTopic, loadInsights])
 
   const loadInsights = () => {
     const progress = learningTracker.getProgress()
