@@ -8,7 +8,7 @@
 
 **新一代智能编程助手平台**
 
-[![CI/CD](https://github.com/your-username/yyc-modern-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/yyc-modern-ai/actions)
+[![CI/CD](https://github.com/YYC-Cube/yyc3-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/YYC-Cube/yyc3-ai/actions)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Version](https://img.shields.io/badge/version-1.0.0-orange.svg)](package.json)
