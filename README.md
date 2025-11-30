@@ -1,4 +1,6 @@
-# YYC³ Modern AI Chatbot - 万象归元于千栈 | 深耕智启新纪元
+# YYC³ Modern AI Chatbot 
+
+万象归元于千栈 | 深耕智启新纪元
 
 <div align="center">
 
@@ -467,9 +469,9 @@ npm start
 
 ## 📞 联系方式
 
-- 项目主页: [https://github.com/your-username/yyc-modern-ai](https://github.com/your-username/yyc-modern-ai)
-- 问题反馈: [GitHub Issues](https://github.com/your-username/yyc-modern-ai/issues)
-- 邮箱: support@yyc-ai.com
+- 项目主页: [https://github.com/YYC-Cube/yyc3-ai.git]
+- 问题反馈: [GitHub Issues]
+- 邮箱: admin@0379.email
 - 文档: [https://docs.yyc-ai.com](https://docs.yyc-ai.com)
 
 ---
