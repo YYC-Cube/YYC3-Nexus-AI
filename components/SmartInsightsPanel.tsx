@@ -12,6 +12,7 @@ export default function SmartInsightsPanel({ currentTopic }: { currentTopic?: st
 
   useEffect(() => {
     loadInsights()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTopic])
 
   const loadInsights = () => {

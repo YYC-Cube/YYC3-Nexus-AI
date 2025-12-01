@@ -19,6 +19,7 @@ export default function VersionHistory({ fileId, currentContent, onRestore }: Ve
 
   useEffect(() => {
     loadVersions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileId])
 
   const loadVersions = () => {
@@ -143,7 +144,7 @@ export default function VersionHistory({ fileId, currentContent, onRestore }: Ve
             <div>
               <Clock className="mx-auto mb-2 h-8 w-8 text-zinc-400" />
               <p>暂无版本历史</p>
-              <p className="mt-1 text-xs">点击"保存版本"创建第一个版本</p>
+              <p className="mt-1 text-xs">点击&ldquo;保存版本&rdquo;创建第一个版本</p>
             </div>
           </div>
         ) : (

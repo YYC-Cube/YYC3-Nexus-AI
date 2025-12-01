@@ -177,6 +177,7 @@ export default function SettingsDialog({ open, onOpenChange }: SettingsDialogPro
                     />
                     {profileAvatar && (
                       <div className="mt-2">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={profileAvatar || "/placeholder.svg"}
                           alt="头像预览"

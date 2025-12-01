@@ -35,6 +35,7 @@ export default function LivePreview({ code, language, autoRefresh = true }: Live
       }, 500)
       return () => clearTimeout(timer)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, autoRefresh])
 
   const refreshPreview = () => {

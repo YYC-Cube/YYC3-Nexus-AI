@@ -40,6 +40,7 @@ export default function TemplateLibrary() {
 
   useEffect(() => {
     filterTemplates()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [templates, selectedCategory, selectedComplexity, searchQuery])
 
   const loadTemplates = () => {

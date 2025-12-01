@@ -27,10 +27,12 @@ export default function ComponentBrowser({ onSelectComponent }: ComponentBrowser
 
   useEffect(() => {
     loadComponents()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     filterAndSortComponents()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [components, selectedCategory, searchQuery, sortBy])
 
   const loadComponents = () => {
