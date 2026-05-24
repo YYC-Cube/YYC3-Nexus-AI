@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/.pnpm-store
 
 # next.js
 /.next/
@@ -25,3 +26,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ide
+.vscode/
+.idea/
+
+# os
+.DS_Store
+Thumbs.db
+
+# misc
+*.log
+undefined

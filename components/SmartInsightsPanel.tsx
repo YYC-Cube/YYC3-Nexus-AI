@@ -12,6 +12,7 @@ export default function SmartInsightsPanel({ currentTopic }: { currentTopic?: st
 
   useEffect(() => {
     loadInsights()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTopic])
 
   const loadInsights = () => {
@@ -84,7 +85,7 @@ export default function SmartInsightsPanel({ currentTopic }: { currentTopic?: st
                     <span className="font-medium">数据支撑:</span> {insight.data}
                   </div>
                   <div className="flex items-start gap-2 text-sm">
-                    <ChevronRight className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
+                    <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
                     <span className="text-green-700 dark:text-green-400">{insight.actionable}</span>
                   </div>
                 </div>
@@ -104,7 +105,7 @@ export default function SmartInsightsPanel({ currentTopic }: { currentTopic?: st
           <div className="space-y-2">
             {recommendations.map((rec, index) => (
               <div key={index} className="flex items-start gap-2 rounded-lg bg-zinc-50 p-3 text-sm dark:bg-zinc-800/50">
-                <span className="flex-shrink-0 font-bold text-purple-600 dark:text-purple-400">{index + 1}.</span>
+                <span className="shrink-0 font-bold text-purple-600 dark:text-purple-400">{index + 1}.</span>
                 <span className="text-zinc-700 dark:text-zinc-300">{rec}</span>
               </div>
             ))}
@@ -114,7 +115,7 @@ export default function SmartInsightsPanel({ currentTopic }: { currentTopic?: st
 
       {/* 技术趋势 */}
       {topTrends.length > 0 && (
-        <div className="rounded-xl border border-zinc-200 bg-gradient-to-br from-purple-50 to-blue-50 p-4 dark:border-zinc-800 dark:from-purple-950/20 dark:to-blue-950/20">
+        <div className="rounded-xl border border-zinc-200 bg-linear-to-br from-purple-50 to-blue-50 p-4 dark:border-zinc-800 dark:from-purple-950/20 dark:to-blue-950/20">
           <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold">
             <Zap className="h-4 w-4" />
             热门技术趋势
@@ -133,7 +134,7 @@ export default function SmartInsightsPanel({ currentTopic }: { currentTopic?: st
                 </div>
                 <div className="mb-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
                   <div
-                    className="h-full bg-gradient-to-r from-purple-500 to-blue-500"
+                    className="h-full bg-linear-to-r from-purple-500 to-blue-500"
                     style={{ width: `${trend.popularity}%` }}
                   />
                 </div>

@@ -215,7 +215,7 @@ export class AdaptiveLearningSystem {
   }
 
   // 预测用户需求
-  async predictUserIntent(context: { code: string; cursorPosition: any; recentActions: string[] }): Promise<string> {
+  async predictUserIntent(context: { code: string; cursorPosition: number; recentActions: string[] }): Promise<string> {
     if (!this.userProfile) return "unknown"
 
     // 基于最近活动预测
@@ -246,7 +246,7 @@ export class AdaptiveLearningSystem {
   }
 
   // 自适应调整建议
-  async adaptSuggestions(baseSuggestions: any[], context: any): Promise<any[]> {
+  async adaptSuggestions(baseSuggestions: unknown[], context: Record<string, unknown>): Promise<any[]> {
     if (!this.userProfile) return baseSuggestions
 
     // 根据用户编码风格调整
@@ -269,7 +269,7 @@ export class AdaptiveLearningSystem {
       }
 
       return {
-        ...suggestion,
+        ...(suggestion as Record<string, unknown>),
         code,
       }
     })
@@ -391,7 +391,7 @@ export class AdaptiveLearningSystem {
     }
   }
 
-  private async updateSkillLevel(interaction: any): Promise<void> {
+  private async updateSkillLevel(interaction: { type: string; topic?: string; duration?: number; score?: number }): Promise<void> {
     if (!this.userProfile) return
 
     // 根据成功率调整技能水平
@@ -485,10 +485,10 @@ export class AdaptiveLearningSystem {
     })
   }
 
-  private sortByUserPreference(suggestions: any[]): any[] {
+  private sortByUserPreference(suggestions: unknown[]): unknown[] {
     if (!this.userProfile) return suggestions
 
-    return suggestions.sort((a, b) => {
+    return suggestions.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
       let scoreA = a.priority || 0
       let scoreB = b.priority || 0
 

@@ -68,6 +68,7 @@ export default function CodePlayground() {
       executor.destroy()
       previewManager.destroy()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -78,6 +79,7 @@ export default function CodePlayground() {
     }, 60000)
 
     return () => clearInterval(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeFile])
 
   const handleFileChange = (content: string) => {

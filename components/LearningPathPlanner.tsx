@@ -125,7 +125,7 @@ export default function LearningPathPlanner() {
         {view === "progress" && (
           <div className="space-y-6">
             <LearningProgressPanel />
-            <SmartInsightsPanel currentTopic={currentTopic} />
+            <SmartInsightsPanel currentTopic={currentTopic ?? undefined} />
           </div>
         )}
 
@@ -175,7 +175,7 @@ export default function LearningPathPlanner() {
                   {/* 进度条 */}
                   <div className="mb-4 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
                     <div
-                      className="h-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all"
+                      className="h-full bg-linear-to-r from-purple-500 to-blue-500 transition-all"
                       style={{ width: `${path.progress}%` }}
                     />
                   </div>
@@ -190,7 +190,7 @@ export default function LearningPathPlanner() {
                       <ul className="space-y-1">
                         {path.nextSteps.map((step, index) => (
                           <li key={index} className="flex items-start gap-2 text-sm text-blue-700 dark:text-blue-300">
-                            <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-600" />
+                            <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />
                             {step}
                           </li>
                         ))}
@@ -213,9 +213,9 @@ export default function LearningPathPlanner() {
                       >
                         <div className="flex items-start gap-3">
                           {milestone.completed ? (
-                            <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                            <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
                           ) : (
-                            <Circle className="mt-0.5 h-5 w-5 flex-shrink-0 text-zinc-400" />
+                            <Circle className="mt-0.5 h-5 w-5 shrink-0 text-zinc-400" />
                           )}
                           <div className="flex-1">
                             <div className="mb-1 font-medium text-sm">{milestone.title}</div>

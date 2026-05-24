@@ -21,7 +21,8 @@ export default function CollaborationPanel({ sessionId, onInvite }: Collaboratio
       const currentSession = manager.getSession(sessionId)
       setSession(currentSession)
     }
-  }, [sessionId, manager])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionId])
 
   const handleCreateSession = () => {
     const name = prompt("会话名称")

@@ -25,6 +25,7 @@ export default function AIConfig() {
     const providers = unifiedAI.getAvailableProviders()
     setAvailableProviders(providers)
     updateModels(config.provider)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const updateModels = (provider: AIProvider) => {

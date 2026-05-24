@@ -84,7 +84,7 @@ export class TestGenerator {
 
 // 测试配置
 describe('Code Unit Tests', () => {
-  let testContext: any;
+  let testContext: Record<string, unknown>;
 
   beforeEach(() => {
     testContext = {};

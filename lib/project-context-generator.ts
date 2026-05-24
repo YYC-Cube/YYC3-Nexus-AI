@@ -1,6 +1,6 @@
 // 项目上下文感知代码生成器 - 理解项目规范、团队标准和用户偏好
 import { adaptiveLearningSystem } from "./adaptive-learning-system"
-import { contextAnalyzer } from "./context-analyzer"
+import { contextAnalyzer, type ContextAnalysis } from "./context-analyzer"
 import { sessionStateManager } from "./session-state-manager"
 
 export interface ProjectContext {
@@ -251,7 +251,7 @@ class ProjectContextGenerator {
   }
 
   // 私有方法：构建上下文感知提示
-  private buildContextAwarePrompt(requirement: string, history: ConversationHistory, analysis: any): string {
+  private buildContextAwarePrompt(requirement: string, history: ConversationHistory, analysis: ContextAnalysis): string {
     let prompt = `# 代码生成任务\n\n`
     prompt += `## 需求描述\n${requirement}\n\n`
 
@@ -415,17 +415,17 @@ export default exampleFunction
       }
     }
 
-    const history = session.history.filter((h) => h.type === "interaction").map((h) => h.data)
+    const history = session.history.filter((h: { type: string }) => h.type === "interaction").map((h: { data: unknown }) => h.data)
 
     return {
-      techDecisions: history.filter((h) => h.type === "tech-decision").map((h) => h.content) || [],
-      confirmedRequirements: history.filter((h) => h.type === "requirement").map((h) => h.content) || [],
-      constraints: history.filter((h) => h.type === "constraint").map((h) => h.content) || [],
-      previousVersions: history.filter((h) => h.type === "code-version").map((h) => h.data) || [],
+      techDecisions: (history as Array<Record<string, unknown>>).filter((h) => h.type === "tech-decision").map((h) => (h as Record<string, unknown>).content as string) || [],
+      confirmedRequirements: (history as Array<Record<string, unknown>>).filter((h) => h.type === "requirement").map((h) => (h as Record<string, unknown>).content as string) || [],
+      constraints: (history as Array<Record<string, unknown>>).filter((h) => h.type === "constraint").map((h) => (h as Record<string, unknown>).content as string) || [],
+      previousVersions: (history as Array<Record<string, unknown>>).filter((h) => h.type === "code-version").map((h) => h.data) || [],
     }
   }
 
-  private buildOptimizationPrompt(currentCode: string, goal: string, previousVersions: any[]): string {
+  private buildOptimizationPrompt(currentCode: string, goal: string, previousVersions: Array<{ code: string; timestamp: Date; feedback?: string }>): string {
     let prompt = `# 代码优化任务\n\n`
     prompt += `## 当前代码\n\`\`\`\n${currentCode}\n\`\`\`\n\n`
     prompt += `## 优化目标\n${goal}\n\n`
@@ -627,7 +627,7 @@ export default exampleFunction
     return warnings
   }
 
-  private generateSuggestions(code: string, analysis: any): string[] {
+  private generateSuggestions(code: string, analysis: ContextAnalysis): string[] {
     const suggestions: string[] = []
 
     if (analysis.difficulty === "beginner") {

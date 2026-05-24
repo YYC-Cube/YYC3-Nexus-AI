@@ -1,0 +1,38 @@
+---
+@file: RES-DOC-001.md
+@description: 预留文档，用于记录未来可能添加的内容
+@author: YanYuCloudCube Team
+@version: v3.1.0
+@created: 2026-05-25
+@updated: 2026-05-25
+@status: reserved
+@tags: [0302-开发规范],[预留文档]
+---
+
+> ***YanYuCloudCube***
+> *言启象限 | 语枢未来*
+> ***Words Initiate Quadrants, Language Serves as Core for Future***
+> *万象归元于云枢 | 深栈智启新纪元*
+> ***All things converge in cloud pivot; Deep stacks ignite a new era of intelligence***
+
+---
+
+# 预留文档
+
+## 说明
+
+本文档为预留文档，用于记录未来可能添加的内容。
+
+当有新的文档需求时，可以基于本模版进行扩展。
+
+---
+
+<div align="center">
+
+> 「***YanYuCloudCube***」
+> 「***<admin@0379.email>***」
+> 「***Words Initiate Quadrants, Language Serves as Core for the Future***」
+> 「***All things converge in cloud pivot; Deep stacks ignite a new era of intelligence***」
+
+**© 2025-2026 YYC³ Team. All Rights Reserved.**
+</div>

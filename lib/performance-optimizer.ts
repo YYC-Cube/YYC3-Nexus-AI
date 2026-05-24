@@ -34,7 +34,7 @@ class PerformanceOptimizer {
     bundleSize: 0,
   }
 
-  private cache: Map<string, { data: any; timestamp: number; hits: number }> = new Map()
+  private cache: Map<string, { data: unknown; timestamp: number; hits: number }> = new Map()
   private cacheConfig: CacheConfig = {
     strategy: "hybrid",
     ttl: 3600000, // 1小时
@@ -55,8 +55,8 @@ class PerformanceOptimizer {
       this.metrics.renderTime = fcp?.startTime || 0
 
       // 收集内存使用
-      if ((performance as any).memory) {
-        this.metrics.memoryUsage = (performance as any).memory.usedJSHeapSize / 1024 / 1024 // MB
+      if ((performance as unknown as { memory?: { usedJSHeapSize: number } }).memory) {
+        this.metrics.memoryUsage = (performance as unknown as { memory: { usedJSHeapSize: number } }).memory.usedJSHeapSize / 1024 / 1024 // MB
       }
     }
 
@@ -69,7 +69,7 @@ class PerformanceOptimizer {
   }
 
   // 智能缓存管理
-  async set(key: string, data: any, customTTL?: number): Promise<void> {
+  async set(key: string, data: unknown, customTTL?: number): Promise<void> {
     // 检查缓存大小
     if (this.cache.size >= this.cacheConfig.maxSize) {
       this.evictCache()

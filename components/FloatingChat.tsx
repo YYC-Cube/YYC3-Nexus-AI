@@ -1,21 +1,25 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import { AtomIcon, X, Maximize2, Minimize2 } from "lucide-react"
+import { AtomIcon, Maximize2, Minimize2, X } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 import Composer from "./Composer"
 import Message from "./Message"
 
+const TypedComposer = Composer as React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<{ onSendMessage?: (content: string) => void; onSend?: (content: string) => void; busy?: boolean }> & React.RefAttributes<any>
+>
+
 export default function FloatingChat() {
   const [isOpen, setIsOpen] = useState(false)
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState<Array<{ id: string; role: string; content: string; timestamp: string }>>([])
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [size, setSize] = useState({ width: 500, height: 600 })
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [isMaximized, setIsMaximized] = useState(false)
-  const chatRef = useRef(null)
-  const resizeRef = useRef(null)
+  const chatRef = useRef<HTMLDivElement>(null)
+  const resizeRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -27,7 +31,7 @@ export default function FloatingChat() {
   }, [])
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
         setPosition({
           x: e.clientX - dragOffset.x,
@@ -56,7 +60,7 @@ export default function FloatingChat() {
     }
   }, [isDragging, isResizing, dragOffset, position])
 
-  const handleDragStart = (e) => {
+  const handleDragStart = (e: React.MouseEvent) => {
     if (isMaximized) return
     const rect = chatRef.current?.getBoundingClientRect()
     if (rect) {
@@ -68,7 +72,7 @@ export default function FloatingChat() {
     setIsDragging(true)
   }
 
-  const handleResizeStart = (e) => {
+  const handleResizeStart = (e: React.MouseEvent) => {
     if (isMaximized) return
     e.stopPropagation()
     setIsResizing(true)
@@ -78,7 +82,7 @@ export default function FloatingChat() {
     setIsMaximized(!isMaximized)
   }
 
-  const handleSendMessage = (content) => {
+  const handleSendMessage = (content: string) => {
     const newMessage = {
       id: Date.now().toString(),
       role: "user",
@@ -91,7 +95,7 @@ export default function FloatingChat() {
       const aiMessage = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "我是AI助手,我收到了您的消息。",
+        content: "我是 NexusAI 智能助手，我收到了您的消息。",
         timestamp: new Date().toISOString(),
       }
       setMessages((prev) => [...prev, aiMessage])
@@ -103,7 +107,7 @@ export default function FloatingChat() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold transition-all hover:scale-105 hover:shadow-lg mx-0 px-0 leading-7 tracking-tighter text-xs italic"
+          className="h-8 w-8 rounded-lg bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold transition-all hover:scale-105 hover:shadow-lg mx-0 px-0 leading-7 tracking-tighter text-xs italic"
           title="打开AI对话"
         >
           {"YYC³"}
@@ -117,20 +121,20 @@ export default function FloatingChat() {
           style={
             isMaximized
               ? {
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: 0,
-                }
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                width: "100%",
+                height: "100%",
+                borderRadius: 0,
+              }
               : {
-                  left: `${position.x}px`,
-                  top: `${position.y}px`,
-                  width: `${size.width}px`,
-                  height: `${size.height}px`,
-                }
+                left: `${position.x}px`,
+                top: `${position.y}px`,
+                width: `${size.width}px`,
+                height: `${size.height}px`,
+              }
           }
         >
           <div
@@ -169,14 +173,16 @@ export default function FloatingChat() {
             ) : (
               <div className="space-y-4">
                 {messages.map((message) => (
-                  <Message key={message.id} message={message} />
+                  <Message key={message.id} role={message.role} emotion="neutral">
+                    {message.content}
+                  </Message>
                 ))}
               </div>
             )}
           </div>
 
           <div className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
-            <Composer onSendMessage={handleSendMessage} />
+            <TypedComposer onSendMessage={handleSendMessage} />
           </div>
 
           {!isMaximized && (

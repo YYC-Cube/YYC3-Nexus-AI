@@ -121,7 +121,7 @@ export default function CodeEditor({
             <select
               value={currentLanguage}
               onChange={(e) => onLanguageChange(e.target.value)}
-              className="rounded bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-none outline-none"
+              className="rounded bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-none outline-hidden"
             >
               <option value="javascript">JavaScript</option>
               <option value="typescript">TypeScript</option>
@@ -191,7 +191,7 @@ export default function CodeEditor({
               onChange={handleChange}
               onKeyDown={handleKeyDown}
               readOnly={readOnly}
-              className="h-full w-full resize-none bg-transparent px-4 py-3 font-mono text-sm leading-6 text-zinc-900 outline-none dark:text-zinc-100"
+              className="h-full w-full resize-none bg-transparent px-4 py-3 font-mono text-sm leading-6 text-zinc-900 outline-hidden dark:text-zinc-100"
               spellCheck={false}
               placeholder="在此输入代码..."
             />

@@ -15,7 +15,12 @@ export default function EmotionalFeedback({ messages, recentErrors, sessionDurat
   const [progressComparisons, setProgressComparisons] = useState<ProgressComparison[]>([])
   const [showEncouragement, setShowEncouragement] = useState(false)
 
-  const analyzeEmotion = useCallback(() => {
+  useEffect(() => {
+    analyzeEmotion()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages, recentErrors])
+
+  const analyzeEmotion = () => {
     const state = emotionalIntelligence.detectEmotion(messages, recentErrors, sessionDuration)
     setEmotionalState(state)
 
@@ -103,7 +108,7 @@ export default function EmotionalFeedback({ messages, recentErrors, sessionDurat
               <div className="font-medium text-sm">{getEmotionText(emotionalState.emotion)}</div>
               <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-white/50 dark:bg-zinc-900/50">
                 <div
-                  className="h-full bg-gradient-to-r from-purple-500 to-blue-500"
+                  className="h-full bg-linear-to-r from-purple-500 to-blue-500"
                   style={{ width: `${emotionalState.intensity}%` }}
                 />
               </div>
@@ -139,7 +144,7 @@ export default function EmotionalFeedback({ messages, recentErrors, sessionDurat
             {progressComparisons.slice(0, showEncouragement ? undefined : 2).map((comparison, index) => (
               <div
                 key={index}
-                className="rounded-lg bg-gradient-to-r from-green-50 to-blue-50 p-3 dark:from-green-950/20 dark:to-blue-950/20"
+                className="rounded-lg bg-linear-to-r from-green-50 to-blue-50 p-3 dark:from-green-950/20 dark:to-blue-950/20"
               >
                 <div className="mb-1 flex items-center justify-between">
                   <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">{comparison.metric}</span>
@@ -163,7 +168,7 @@ export default function EmotionalFeedback({ messages, recentErrors, sessionDurat
 
       {/* 特殊鼓励消息 */}
       {emotionalState.emotion === "confident" && (
-        <div className="rounded-xl border border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50 p-4 dark:border-purple-900/30 dark:from-purple-950/20 dark:to-pink-950/20">
+        <div className="rounded-xl border border-purple-200 bg-linear-to-r from-purple-50 to-pink-50 p-4 dark:border-purple-900/30 dark:from-purple-950/20 dark:to-pink-950/20">
           <div className="flex items-center gap-2 text-sm">
             <Sparkles className="h-4 w-4 text-purple-600" />
             <span className="font-medium text-purple-900 dark:text-purple-100">

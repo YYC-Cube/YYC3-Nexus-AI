@@ -5,7 +5,7 @@ export interface SessionState {
   startTime: Date
   lastActivity: Date
   isActive: boolean
-  context: Record<string, any>
+  context: Record<string, unknown>
   history: SessionHistory[]
   metadata: SessionMetadata
 }
@@ -13,8 +13,9 @@ export interface SessionState {
 export interface SessionHistory {
   id: string
   timestamp: Date
-  type: "interaction" | "event" | "error"
-  data: any
+  type: "interaction" | "event" | "error" | "tech-decision" | "requirement" | "constraint" | "code-version"
+  data: unknown
+  content?: string
 }
 
 export interface SessionMetadata {
@@ -67,7 +68,7 @@ class SessionStateManager {
   }
 
   // 更新会话上下文
-  updateContext(key: string, value: any): void {
+  updateContext(key: string, value: unknown): void {
     const session = this.getCurrentSession()
     if (!session) return
 
@@ -77,7 +78,7 @@ class SessionStateManager {
   }
 
   // 批量更新上下文
-  batchUpdateContext(updates: Record<string, any>): void {
+  batchUpdateContext(updates: Record<string, unknown>): void {
     const session = this.getCurrentSession()
     if (!session) return
 
@@ -93,7 +94,7 @@ class SessionStateManager {
   }
 
   // 添加历史记录
-  addHistory(type: SessionHistory["type"], data: any): void {
+  addHistory(type: SessionHistory["type"], data: unknown): void {
     const session = this.getCurrentSession()
     if (!session) return
 
@@ -113,7 +114,7 @@ class SessionStateManager {
 
     // 更新元数据
     session.metadata.totalInteractions++
-    if (type === "interaction" && data.success) {
+    if (type === "interaction" && (data as Record<string, unknown>)?.success) {
       session.metadata.successfulInteractions++
     }
     if (type === "error") {
@@ -179,7 +180,7 @@ class SessionStateManager {
   // 恢复会话
   resumeSession(sessionId: string): SessionState | null {
     // 尝试从内存加载
-    let session = this.sessions.get(sessionId)
+    let session: SessionState | null | undefined = this.sessions.get(sessionId) ?? null
 
     // 尝试从localStorage恢复
     if (!session) {
@@ -196,7 +197,7 @@ class SessionStateManager {
       this.persistSession(session)
     }
 
-    return session || null
+    return session ?? null
   }
 
   // 获取所有会话
@@ -267,9 +268,9 @@ class SessionStateManager {
         // 恢复Date对象
         session.startTime = new Date(session.startTime)
         session.lastActivity = new Date(session.lastActivity)
-        session.history = session.history.map((h: any) => ({
+        session.history = session.history.map((h: { id?: string; role?: string; content?: string; timestamp?: string }) => ({
           ...h,
-          timestamp: new Date(h.timestamp),
+          timestamp: h.timestamp ? new Date(h.timestamp) : new Date(),
         }))
         return session
       }

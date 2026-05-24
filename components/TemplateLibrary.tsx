@@ -40,6 +40,7 @@ export default function TemplateLibrary() {
 
   useEffect(() => {
     filterTemplates()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [templates, selectedCategory, selectedComplexity, searchQuery])
 
   const loadTemplates = () => {
@@ -326,7 +327,7 @@ export default function TemplateLibrary() {
                   <ul className="space-y-1">
                     {selectedTemplate.bestPractices.map((practice, index) => (
                       <li key={index} className="text-xs text-zinc-600 dark:text-zinc-400 flex items-start gap-2">
-                        <Zap className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
+                        <Zap className="h-3 w-3 text-yellow-500 mt-0.5 shrink-0" />
                         <span>{practice}</span>
                       </li>
                     ))}
@@ -338,7 +339,7 @@ export default function TemplateLibrary() {
                 <div>
                   <Label className="text-sm font-semibold mb-3 block">项目名称</Label>
                   <Input
-                    placeholder="my-project"
+                    placeholder="yyc3-nexusai"
                     value={customization.projectName}
                     onChange={(e) => setCustomization({ ...customization, projectName: e.target.value })}
                   />

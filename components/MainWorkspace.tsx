@@ -1,18 +1,27 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, lazy, Suspense } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 import { MessageSquare, Code2, FolderTree, Activity, FileCode, Zap, BookOpen, Lightbulb, Github } from "lucide-react"
-import AIAssistantUI from "./AIAssistantUI"
-import WorkspaceLayout from "./WorkspaceLayout"
-import IntegratedWorkspace from "./IntegratedWorkspace"
-import ProjectManager from "./ProjectManager"
-import EnhancedCodeReviewPanel from "./EnhancedCodeReviewPanel"
-import PerformanceMonitorPanel from "./PerformanceMonitorPanel"
-import LearningPathPlanner from "./LearningPathPlanner"
-import PromptTemplateManager from "./PromptTemplateManager"
-import HelpSystem from "./HelpSystem"
-import FloatingChat from "./FloatingChat"
 import { useLocale } from "@/contexts/LocaleContext"
+
+const AIAssistantUI = lazy(() => import("./AIAssistantUI"))
+const WorkspaceLayout = lazy(() => import("./WorkspaceLayout"))
+const IntegratedWorkspace = lazy(() => import("./IntegratedWorkspace"))
+const ProjectManager = lazy(() => import("./ProjectManager"))
+const EnhancedCodeReviewPanel = lazy(() => import("./EnhancedCodeReviewPanel"))
+const PerformanceMonitorPanel = lazy(() => import("./PerformanceMonitorPanel"))
+const LearningPathPlanner = lazy(() => import("./LearningPathPlanner"))
+const PromptTemplateManager = lazy(() => import("./PromptTemplateManager"))
+const HelpSystem = lazy(() => import("./HelpSystem"))
+const FloatingChat = lazy(() => import("./FloatingChat"))
+
+function TabLoader() {
+  return (
+    <div className="flex h-full items-center justify-center">
+      <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-300 border-t-blue-600" />
+    </div>
+  )
+}
 
 export default function MainWorkspace() {
   const { t } = useLocale()
@@ -102,25 +111,33 @@ export default function MainWorkspace() {
         <div className="h-full w-full">
           <TabsContent value="chat" className="h-full m-0">
             <div className="h-full w-full">
-              <AIAssistantUI />
+              <Suspense fallback={<TabLoader />}>
+                <AIAssistantUI />
+              </Suspense>
             </div>
           </TabsContent>
 
           <TabsContent value="workspace" className="h-full m-0">
             <div className="h-full w-full">
-              <WorkspaceLayout />
+              <Suspense fallback={<TabLoader />}>
+                <WorkspaceLayout />
+              </Suspense>
             </div>
           </TabsContent>
 
           <TabsContent value="integrated" className="h-full m-0">
             <div className="h-full w-full">
-              <IntegratedWorkspace onCodeChange={handleCodeChange} />
+              <Suspense fallback={<TabLoader />}>
+                <IntegratedWorkspace onCodeChange={handleCodeChange} />
+              </Suspense>
             </div>
           </TabsContent>
 
           <TabsContent value="projects" className="h-full m-0">
             <div className="h-full w-full">
-              <ProjectManager />
+              <Suspense fallback={<TabLoader />}>
+                <ProjectManager />
+              </Suspense>
             </div>
           </TabsContent>
 
@@ -129,36 +146,46 @@ export default function MainWorkspace() {
               <div className="flex-1">
                 <div className="h-full p-4">
                   <div className="h-full border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden bg-white dark:bg-zinc-900">
-                    <IntegratedWorkspace onCodeChange={handleCodeChange} />
+                    <Suspense fallback={<TabLoader />}>
+                      <IntegratedWorkspace onCodeChange={handleCodeChange} />
+                    </Suspense>
                   </div>
                 </div>
               </div>
               <div className="w-[450px] border-l border-zinc-200 dark:border-zinc-800">
-                <EnhancedCodeReviewPanel
-                  code={currentCode}
-                  language={currentLanguage}
-                  onApplyFix={setCurrentCode}
-                  techStack={["React", "TypeScript", "Tailwind CSS"]}
-                />
+                <Suspense fallback={<TabLoader />}>
+                  <EnhancedCodeReviewPanel
+                    code={currentCode}
+                    language={currentLanguage}
+                    onApplyFix={setCurrentCode}
+                    techStack={["React", "TypeScript", "Tailwind CSS"]}
+                  />
+                </Suspense>
               </div>
             </div>
           </TabsContent>
 
           <TabsContent value="performance" className="h-full m-0">
             <div className="h-full w-full">
-              <PerformanceMonitorPanel />
+              <Suspense fallback={<TabLoader />}>
+                <PerformanceMonitorPanel />
+              </Suspense>
             </div>
           </TabsContent>
 
           <TabsContent value="learning" className="h-full m-0">
             <div className="h-full w-full p-6">
-              <LearningPathPlanner />
+              <Suspense fallback={<TabLoader />}>
+                <LearningPathPlanner />
+              </Suspense>
             </div>
           </TabsContent>
 
           <TabsContent value="prompts" className="h-full m-0">
             <div className="h-full w-full">
-              <PromptTemplateManager />
+              <Suspense fallback={<TabLoader />}>
+                <PromptTemplateManager />
+              </Suspense>
             </div>
           </TabsContent>
         </div>

@@ -39,7 +39,7 @@ export default function LearningProgressPanel() {
   return (
     <div className="space-y-4">
       {/* 进度概览卡片 */}
-      <div className="rounded-xl border border-zinc-200 bg-gradient-to-br from-purple-50 to-blue-50 p-6 dark:border-zinc-800 dark:from-purple-950/20 dark:to-blue-950/20">
+      <div className="rounded-xl border border-zinc-200 bg-linear-to-br from-purple-50 to-blue-50 p-6 dark:border-zinc-800 dark:from-purple-950/20 dark:to-blue-950/20">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold">📊 学习进度总览</h3>
           <button
@@ -80,7 +80,7 @@ export default function LearningProgressPanel() {
             <div className="text-xl font-bold">{stats.averageMastery}%</div>
             <div className="mt-1 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
               <div
-                className="h-full bg-gradient-to-r from-purple-500 to-blue-500"
+                className="h-full bg-linear-to-r from-purple-500 to-blue-500"
                 style={{ width: `${stats.averageMastery}%` }}
               />
             </div>

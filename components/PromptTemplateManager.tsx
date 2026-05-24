@@ -43,6 +43,7 @@ export default function PromptTemplateManager() {
 
   useEffect(() => {
     filterTemplates()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [templates, selectedCategory, searchQuery])
 
   const loadTemplates = () => {

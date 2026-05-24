@@ -2,6 +2,10 @@
 import { parse } from "@babel/parser"
 import traverse from "@babel/traverse"
 
+type BabelPath = any
+
+type BabelNode = any
+
 export interface CodeUnderstanding {
   language: string
   structure: CodeStructure
@@ -63,7 +67,7 @@ export interface VariableInfo {
 
 export interface ConstantInfo {
   name: string
-  value: any
+  value: string | number | boolean | null | undefined
   type: string
 }
 
@@ -208,11 +212,11 @@ export class DeepCodeUnderstanding {
       })
 
       traverse(ast, {
-        FunctionDeclaration: (path: any) => {
+        FunctionDeclaration: (path: BabelPath) => {
           const node = path.node
           structure.functions.push({
             name: node.id?.name || "anonymous",
-            params: node.params.map((p: any) => p.name || p.type),
+            params: node.params.map((p: BabelNode) => p.name || p.type),
             isAsync: node.async || false,
             isArrow: false,
             loc: { start: node.loc?.start.line || 0, end: node.loc?.end.line || 0 },
@@ -220,7 +224,7 @@ export class DeepCodeUnderstanding {
             calls: this.extractFunctionCalls(path),
           })
         },
-        ArrowFunctionExpression: (path: any) => {
+        ArrowFunctionExpression: (path: BabelPath) => {
           const node = path.node
           const parent = path.parent
 
@@ -231,7 +235,7 @@ export class DeepCodeUnderstanding {
 
           structure.functions.push({
             name,
-            params: node.params.map((p: any) => p.name || p.type),
+            params: node.params.map((p: BabelNode) => p.name || p.type),
             isAsync: node.async || false,
             isArrow: true,
             loc: { start: node.loc?.start.line || 0, end: node.loc?.end.line || 0 },
@@ -239,16 +243,16 @@ export class DeepCodeUnderstanding {
             calls: this.extractFunctionCalls(path),
           })
         },
-        ClassDeclaration: (path: any) => {
+        ClassDeclaration: (path: BabelPath) => {
           const node = path.node
           const methods: FunctionInfo[] = []
 
           path.traverse({
-            ClassMethod: (methodPath: any) => {
+            ClassMethod: (methodPath: BabelPath) => {
               const method = methodPath.node
               methods.push({
                 name: method.key.name || "anonymous",
-                params: method.params.map((p: any) => p.name || p.type),
+                params: method.params.map((p: BabelNode) => p.name || p.type),
                 isAsync: method.async || false,
                 isArrow: false,
                 loc: { start: method.loc?.start.line || 0, end: method.loc?.end.line || 0 },
@@ -261,25 +265,25 @@ export class DeepCodeUnderstanding {
           structure.classes.push({
             name: node.id?.name || "anonymous",
             extends: node.superClass?.name,
-            implements: node.implements?.map((i: any) => i.id.name) || [],
+            implements: node.implements?.map((i: BabelNode) => i.id.name) || [],
             methods,
             properties: [],
             loc: { start: node.loc?.start.line || 0, end: node.loc?.end.line || 0 },
           })
         },
-        ImportDeclaration: (path: any) => {
+        ImportDeclaration: (path: BabelPath) => {
           const node = path.node
           structure.imports.push({
             source: node.source.value,
-            imports: node.specifiers.map((s: any) => ({
+            imports: node.specifiers.map((s: BabelNode) => ({
               name: s.local.name,
               alias: s.imported?.name !== s.local.name ? s.imported?.name : undefined,
             })),
-            isDefault: node.specifiers.some((s: any) => s.type === "ImportDefaultSpecifier"),
+            isDefault: node.specifiers.some((s: BabelNode) => s.type === "ImportDefaultSpecifier"),
             isDynamic: false,
           })
         },
-        ExportNamedDeclaration: (path: any) => {
+        ExportNamedDeclaration: (path: BabelPath) => {
           const node = path.node
           if (node.declaration) {
             const decl = node.declaration
@@ -292,9 +296,9 @@ export class DeepCodeUnderstanding {
             }
           }
         },
-        VariableDeclaration: (path: any) => {
+        VariableDeclaration: (path: BabelPath) => {
           const node = path.node
-          node.declarations.forEach((decl: any) => {
+          node.declarations.forEach((decl: BabelNode) => {
             if (decl.id.name) {
               if (node.kind === "const") {
                 structure.constants.push({
@@ -540,7 +544,7 @@ export class DeepCodeUnderstanding {
   }
 
   // 辅助方法
-  private calculateFunctionComplexity(path: any): number {
+  private calculateFunctionComplexity(path: BabelPath): number {
     let complexity = 1
     path.traverse({
       IfStatement: () => complexity++,
@@ -553,10 +557,10 @@ export class DeepCodeUnderstanding {
     return complexity
   }
 
-  private extractFunctionCalls(path: any): string[] {
+  private extractFunctionCalls(path: BabelPath): string[] {
     const calls: string[] = []
     path.traverse({
-      CallExpression: (callPath: any) => {
+      CallExpression: (callPath: BabelPath) => {
         const callee = callPath.node.callee
         if (callee.type === "Identifier") {
           calls.push(callee.name)
@@ -568,15 +572,15 @@ export class DeepCodeUnderstanding {
     return calls
   }
 
-  private extractValue(node: any): any {
-    if (!node) return undefined
+  private extractValue(node: BabelNode): string {
+    if (!node) return ""
     if (node.type === "StringLiteral") return node.value
     if (node.type === "NumericLiteral") return node.value
     if (node.type === "BooleanLiteral") return node.value
     return "complex"
   }
 
-  private inferType(node: any): string {
+  private inferType(node: BabelNode): string {
     if (!node) return "unknown"
     if (node.type === "StringLiteral") return "string"
     if (node.type === "NumericLiteral") return "number"
@@ -587,7 +591,7 @@ export class DeepCodeUnderstanding {
     return "unknown"
   }
 
-  private inferScope(path: any): "global" | "function" | "block" {
+  private inferScope(path: BabelPath): "global" | "function" | "block" {
     if (path.scope.block.type === "Program") return "global"
     if (path.scope.block.type === "BlockStatement") return "block"
     return "function"

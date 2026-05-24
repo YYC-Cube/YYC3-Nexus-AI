@@ -14,7 +14,7 @@ export class IntentRecognizer {
     creation: ["创建", "生成", "新建", "制作", "设计", "构建"],
   }
 
-  static analyze(userInput: string, context?: any): IntentResult {
+  static analyze(userInput: string, context?: Record<string, unknown>): IntentResult {
     const normalizedInput = userInput.toLowerCase()
     const intents: { intent: string; score: number }[] = []
 

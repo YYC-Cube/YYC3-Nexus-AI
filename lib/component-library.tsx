@@ -464,7 +464,7 @@ export class ComponentLibrary {
     try {
       const data = localStorage.getItem("custom-components")
       if (data) {
-        this.customComponents = JSON.parse(data).map((c: any) => ({
+        this.customComponents = JSON.parse(data).map((c: Record<string, unknown>) => ({
           ...c,
           createdAt: new Date(c.createdAt),
           updatedAt: new Date(c.updatedAt),

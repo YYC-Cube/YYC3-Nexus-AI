@@ -29,6 +29,7 @@ export default function CodeReviewPanel({ code, language, onApplyFix }: CodeRevi
     if (code.trim()) {
       performReview()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, language])
 
   useEffect(() => {

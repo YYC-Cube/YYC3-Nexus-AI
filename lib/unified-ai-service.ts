@@ -42,22 +42,21 @@ interface AIServiceProvider {
 // OpenAI 提供商
 class OpenAIProvider implements AIServiceProvider {
   async chat(messages: AIMessage[], config: AIServiceConfig): Promise<AIResponse> {
-    const response = await fetch(config.baseURL || "https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("/api/ai/chat", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        provider: config.provider || "openai",
         model: config.model,
         messages,
         temperature: config.temperature,
-        max_tokens: config.maxTokens,
+        maxTokens: config.maxTokens,
       }),
     })
 
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.statusText}`)
+      const err = await response.json().catch(() => ({ error: response.statusText }))
+      throw new Error(err.error || `AI API error: ${response.status}`)
     }
 
     const data = await response.json()
@@ -75,23 +74,21 @@ class OpenAIProvider implements AIServiceProvider {
   }
 
   async *stream(messages: AIMessage[], config: AIServiceConfig): AsyncGenerator<StreamChunk> {
-    const response = await fetch(config.baseURL || "https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("/api/ai/chat", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.apiKey}`,
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        provider: config.provider || "openai",
         model: config.model,
         messages,
         temperature: config.temperature,
-        max_tokens: config.maxTokens,
+        maxTokens: config.maxTokens,
         stream: true,
       }),
     })
 
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.statusText}`)
+      throw new Error(`AI API error: ${response.status}`)
     }
 
     const reader = response.body?.getReader()
@@ -122,8 +119,8 @@ class OpenAIProvider implements AIServiceProvider {
             if (content) {
               yield { content, isComplete: false }
             }
-          } catch (error) {
-            console.error("[v0] Failed to parse stream chunk:", error)
+          } catch {
+            // skip malformed chunks
           }
         }
       }
@@ -257,7 +254,6 @@ class UnifiedAIService {
     try {
       return await provider.chat(messages, finalConfig)
     } catch (error) {
-      console.error(`[v0] AI service error (${finalConfig.provider}):`, error)
       throw error
     }
   }
@@ -278,7 +274,6 @@ class UnifiedAIService {
     try {
       yield* provider.stream(messages, finalConfig)
     } catch (error) {
-      console.error(`[v0] AI service stream error (${finalConfig.provider}):`, error)
       throw error
     }
   }
@@ -327,8 +322,7 @@ class UnifiedAIService {
     try {
       const response = await this.chat([{ role: "user", content: "Hello" }], testConfig)
       return response.content.length > 0
-    } catch (error) {
-      console.error(`[v0] Connection test failed for ${testConfig.provider}:`, error)
+    } catch {
       return false
     }
   }

@@ -49,7 +49,7 @@ export interface OptimizationSuggestion {
 class PerformanceMonitor {
   private metrics: PerformanceMetrics[] = []
   private isMonitoring = false
-  private monitoringInterval: any = null
+  private monitoringInterval: ReturnType<typeof setInterval> | null = null
 
   // 开始监控
   startMonitoring(interval = 1000): void {
@@ -95,7 +95,7 @@ class PerformanceMonitor {
     if (typeof window !== "undefined" && "performance" in window) {
       const entries = performance.getEntriesByType("frame")
       if (entries.length > 0) {
-        return Math.round(1000 / (entries[entries.length - 1] as any).duration)
+        return Math.round(1000 / (entries[entries.length - 1] as PerformanceEntry).duration)
       }
     }
     return 60 // 默认值
@@ -103,8 +103,8 @@ class PerformanceMonitor {
 
   // 测量内存使用
   private measureMemory(): MemoryMetrics {
-    if (typeof window !== "undefined" && "performance" in window && (performance as any).memory) {
-      const memory = (performance as any).memory
+    if (typeof window !== "undefined" && "performance" in window && (performance as unknown as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory) {
+      const memory = (performance as unknown as { memory: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory
       return {
         used: Math.round(memory.usedJSHeapSize / 1024 / 1024),
         total: Math.round(memory.totalJSHeapSize / 1024 / 1024),

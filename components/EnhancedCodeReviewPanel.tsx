@@ -169,7 +169,7 @@ export default function EnhancedCodeReviewPanel({
           </Badge>
         </div>
         <div className="flex items-center gap-2">
-          {review && review.autoFixAvailable && onApplyFix && (
+          {review && review.autoFixAvailable && typeof onApplyFix === "function" && (
             <Button
               size="sm"
               variant="default"

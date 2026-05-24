@@ -11,7 +11,7 @@ export interface Intent {
   name: string
   category: "query" | "command" | "explanation" | "generation" | "debugging"
   confidence: number
-  parameters: Record<string, any>
+  parameters: Record<string, unknown>
 }
 
 export interface Entity {
@@ -38,15 +38,15 @@ export interface Action {
 export interface ConversationContext {
   history: Message[]
   currentTopic?: string
-  userProfile?: any
-  sessionState: Record<string, any>
+  userProfile?: Record<string, unknown>
+  sessionState: Record<string, unknown>
 }
 
 export interface Message {
   role: "user" | "assistant"
   content: string
   timestamp: Date
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 class NaturalLanguageUnderstanding {
@@ -392,8 +392,8 @@ class NaturalLanguageUnderstanding {
     return Math.min(1, confidence)
   }
 
-  private extractIntentParameters(text: string, intentName: string): Record<string, any> {
-    const parameters: Record<string, any> = {}
+  private extractIntentParameters(text: string, intentName: string): Record<string, unknown> {
+    const parameters: Record<string, unknown> = {}
 
     // 根据不同意图提取参数
     switch (intentName) {

@@ -285,7 +285,7 @@ export const translations = {
       info: "信息",
       security: "安全",
       performance: "性能",
-      maintainability: "可维护性",
+      maintainabilityScore: "可维护性评分",
       style: "代码风格",
       bestPractice: "最佳实践",
     },
@@ -629,7 +629,7 @@ export const translations = {
       info: "Info",
       security: "Security",
       performance: "Performance",
-      maintainability: "Maintainability",
+      maintainabilityScore: "Maintainability Score",
       style: "Style",
       bestPractice: "Best Practice",
     },
@@ -696,11 +696,11 @@ export const translations = {
 // 获取翻译文本的辅助函数
 export function getTranslation(locale: Locale, key: string): string {
   const keys = key.split(".")
-  let value: any = translations[locale]
+  let value: Record<string, unknown> = translations[locale] as Record<string, unknown>
 
   for (const k of keys) {
     if (value && typeof value === "object") {
-      value = value[k]
+      value = value[k] as Record<string, unknown>
     } else {
       return key
     }

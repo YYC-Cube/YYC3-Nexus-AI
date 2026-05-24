@@ -12,7 +12,7 @@ export interface FunctionGenerationRequest {
     type: string
     description: string
     optional?: boolean
-    defaultValue?: any
+    defaultValue?: unknown
   }>
   returnType: {
     type: string
@@ -387,7 +387,7 @@ Promise.all([
     return optimizations
   }
 
-  private generateSampleValue(type: string): any {
+  private generateSampleValue(type: string): unknown {
     switch (type.toLowerCase()) {
       case "string":
         return '"sample"'
@@ -525,12 +525,12 @@ ${assignments}
     const implementations: string[] = []
 
     for (const method of methods) {
-      const params = method.parameters.map((p: any) => `${p.name}: ${p.type}`).join(", ")
+      const params = method.parameters.map((p: Record<string, unknown>) => `${p.name}: ${p.type}`).join(", ")
 
       const prompt = `为类 ${className} 生成方法 ${method.name} 的实现:
 
 功能描述: ${method.description}
-参数: ${method.parameters.map((p: any) => `${p.name}: ${p.type}`).join(", ")}
+参数: ${method.parameters.map((p: Record<string, unknown>) => `${p.name}: ${p.type}`).join(", ")}
 返回类型: ${method.returnType}
 
 要求:
@@ -585,13 +585,13 @@ ${implementation}
 
         case "observer":
           code += `
-  private observers: Array<(data: any) => void> = [];
+  private observers: Array<(data: unknown) => void> = [];
 
-  subscribe(observer: (data: any) => void): void {
+  subscribe(observer: (data: unknown) => void): void {
     this.observers.push(observer);
   }
 
-  notify(data: any): void {
+  notify(data: unknown): void {
     this.observers.forEach((observer) => observer(data));
   }`
           break
@@ -826,7 +826,7 @@ ${requestDTO}
 ${responseDTO}
 
 // 验证函数
-export function validate${dtoName}Request(data: any): data is ${dtoName}Request {
+export function validate${dtoName}Request(data: unknown): data is ${dtoName}Request {
 ${Object.entries(parameters.body || {})
   .map(([key, type]) => `  if (typeof data.${key} !== '${type.toLowerCase()}') return false;`)
   .join("\n")}
@@ -1199,7 +1199,7 @@ ${processing.aggregation
   /**
    * 应用清洗规则
    */
-  private applyCleaning(data: any, rule: string): any {
+  private applyCleaning(data: unknown, rule: string): unknown {
     // 清洗逻辑实现
     return data;
   }
@@ -1207,7 +1207,7 @@ ${processing.aggregation
   /**
    * 应用转换规则
    */
-  private applyTransformation(data: any, rule: string): any {
+  private applyTransformation(data: unknown, rule: string): unknown {
     // 转换逻辑实现
     return data;
   }
@@ -1215,7 +1215,7 @@ ${processing.aggregation
   /**
    * 应用聚合规则
    */
-  private applyAggregation(map: Map<any, any>, data: any, rule: string): void {
+  private applyAggregation(map: Map<any, any>, data: unknown, rule: string): void {
     // 聚合逻辑实现
   }
 
