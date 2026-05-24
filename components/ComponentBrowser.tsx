@@ -35,7 +35,7 @@ export default function ComponentBrowser({ onSelectComponent }: ComponentBrowser
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [components, selectedCategory, searchQuery, sortBy])
 
-  const loadComponents = () => {
+  const loadComponents = useCallback(() => {
     const allComponents = library.getAllComponents()
     setComponents(allComponents)
   }, [library])

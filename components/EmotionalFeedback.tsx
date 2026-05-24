@@ -20,11 +20,10 @@ export default function EmotionalFeedback({ messages, recentErrors, sessionDurat
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, recentErrors])
 
-  const analyzeEmotion = () => {
+  const analyzeEmotion = useCallback(() => {
     const state = emotionalIntelligence.detectEmotion(messages, recentErrors, sessionDuration)
     setEmotionalState(state)
 
-    // 生成数据化鼓励
     const comparisons = emotionalIntelligence.generateDataDrivenEncouragement()
     setProgressComparisons(comparisons)
   }, [messages, recentErrors, sessionDuration])

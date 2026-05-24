@@ -8,6 +8,8 @@ const overrides = {
   "react-hooks/set-state-in-effect": "off",
   "react-hooks/purity": "off",
   "react-hooks/no-unnecessary-hook-call": "off",
+  "react-compiler/react-compiler": "off",
+  "react-hooks/preserve-manual-memoization": "off",
 }
 
 config.forEach((rule) => {
