@@ -17,6 +17,7 @@ export default function CodeDiff({ oldContent, newContent, oldLabel = "旧版本
 
   const diff = useMemo(() => {
     return versionControl.compareVersions(oldContent, newContent)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [oldContent, newContent])
 
   const stats = useMemo(() => {

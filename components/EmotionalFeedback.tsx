@@ -17,6 +17,7 @@ export default function EmotionalFeedback({ messages, recentErrors, sessionDurat
 
   useEffect(() => {
     analyzeEmotion()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, recentErrors])
 
   const analyzeEmotion = () => {

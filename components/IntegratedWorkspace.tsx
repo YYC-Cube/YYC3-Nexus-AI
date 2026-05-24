@@ -33,6 +33,7 @@ console.log(greet("World"))`)
       analyzeCode()
     }, 1000)
     return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, language])
 
   const analyzeCode = async () => {

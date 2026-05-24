@@ -19,6 +19,7 @@ export default function VersionHistory({ fileId, currentContent, onRestore }: Ve
 
   useEffect(() => {
     loadVersions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileId])
 
   const loadVersions = () => {
