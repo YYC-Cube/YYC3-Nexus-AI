@@ -14,7 +14,7 @@ import ReactFlow, {
   Panel,
 } from "reactflow"
 import "reactflow/dist/style.css"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { Download, Share2, CheckCircle, Circle } from "lucide-react"
 
 interface MindMapNode {

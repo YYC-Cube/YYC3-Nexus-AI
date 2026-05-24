@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { Check, Copy, Play, Download, Maximize2 } from "lucide-react"
 import CodeHighlight from "./CodeHighlight"
 

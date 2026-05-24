@@ -1,7 +1,7 @@
 // components/tech/TechStackProvider.tsx
 "use client"
 
-import { createContext, useContext, ReactNode } from 'react'
+import { ReactNode, createContext, useState } from 'react'
 
 interface TechStack {
   ui: {
@@ -51,28 +51,31 @@ export function TechStackProvider({ children }: { children: ReactNode }) {
   const [stack, setStack] = useState<TechStack>(defaultTechStack)
 
   const addComponent = (category: keyof TechStack, item: string) => {
-    setStack(prev => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        [Object.keys(prev[category])[0]]: [
-          ...(prev[category as keyof typeof prev][Object.keys(prev[category])[0] as any] as string[]),
-          item
-        ]
+    setStack(prev => {
+      const categoryData = prev[category] as Record<string, string[]>
+      const key = Object.keys(categoryData)[0]
+      return {
+        ...prev,
+        [category]: {
+          ...prev[category],
+          [key]: [...(categoryData[key] || []), item]
+        }
       }
-    }))
+    })
   }
 
   const removeComponent = (category: keyof TechStack, item: string) => {
-    setStack(prev => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        [Object.keys(prev[category])[0]]: (
-          prev[category as keyof typeof prev][Object.keys(prev[category])[0] as any] as string[]
-        ).filter(i => i !== item)
+    setStack(prev => {
+      const categoryData = prev[category] as Record<string, string[]>
+      const key = Object.keys(categoryData)[0]
+      return {
+        ...prev,
+        [category]: {
+          ...prev[category],
+          [key]: (categoryData[key] || []).filter((i: string) => i !== item)
+        }
       }
-    }))
+    })
   }
 
   return (

@@ -51,7 +51,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-white to-purple-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 p-4">
       <div className="w-full max-w-md">
         {/* Logo和标题 */}
         <div className="text-center mb-8">
@@ -149,7 +149,7 @@ export default function LoginPage() {
               <div className="w-full border-t border-zinc-300 dark:border-zinc-700" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 text-zinc-500">
+              <span className="px-4 bg-linear-to-br from-blue-50 via-white to-purple-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 text-zinc-500">
                 或使用以下方式登录
               </span>
             </div>

@@ -2,7 +2,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "motion/react"
 import { X, Heart, Sparkles } from "lucide-react"
 import { emotionalEngine, type EmotionalResponse, type EmotionalState } from "@/lib/emotional-interaction"
 

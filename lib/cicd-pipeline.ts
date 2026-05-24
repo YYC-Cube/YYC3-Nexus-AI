@@ -156,7 +156,7 @@ class CICDPipeline {
 
     stage.steps.push(step)
     stage.endTime = new Date()
-    stage.duration = stage.endTime.getTime() - stage.startTime.getTime()
+    stage.duration = stage.endTime.getTime() - (stage.startTime?.getTime() ?? 0)
 
     return stage
   }
@@ -183,7 +183,7 @@ class CICDPipeline {
     stage.status = hasFailure ? "failed" : "success"
 
     stage.endTime = new Date()
-    stage.duration = stage.endTime.getTime() - stage.startTime.getTime()
+    stage.duration = stage.endTime.getTime() - (stage.startTime?.getTime() ?? 0)
 
     return stage
   }
@@ -276,7 +276,7 @@ class CICDPipeline {
 
     stage.steps.push(step)
     stage.endTime = new Date()
-    stage.duration = stage.endTime.getTime() - stage.startTime.getTime()
+    stage.duration = stage.endTime.getTime() - (stage.startTime?.getTime() ?? 0)
 
     return stage
   }
@@ -308,7 +308,7 @@ class CICDPipeline {
     stage.steps.push(step)
 
     stage.endTime = new Date()
-    stage.duration = stage.endTime.getTime() - stage.startTime.getTime()
+    stage.duration = stage.endTime.getTime() - (stage.startTime?.getTime() ?? 0)
 
     return stage
   }
@@ -338,7 +338,7 @@ class CICDPipeline {
     stage.steps.push(step)
 
     stage.endTime = new Date()
-    stage.duration = stage.endTime.getTime() - stage.startTime.getTime()
+    stage.duration = stage.endTime.getTime() - (stage.startTime?.getTime() ?? 0)
 
     return stage
   }

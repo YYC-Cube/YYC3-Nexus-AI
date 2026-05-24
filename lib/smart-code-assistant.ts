@@ -7,7 +7,7 @@ import { sessionStateManager } from "./session-state-manager"
 export interface SmartCodeRequest {
   type: "generate" | "optimize" | "refactor" | "explain" | "test"
   input: string
-  context?: any
+  context?: Record<string, unknown>
   options?: {
     useProjectContext?: boolean
     useUserPreferences?: boolean
@@ -67,7 +67,7 @@ class SmartCodeAssistant {
 
     // 学习用户交互
     await adaptiveLearningSystem.learnFromInteraction({
-      type: request.type as any,
+      type: request.type ,
       code: result.code,
       success: result.complianceScore > 70,
       context: request.input,

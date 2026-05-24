@@ -1,7 +1,7 @@
 // 智能代码生成系统 - 基于上下文的代码补全和生成
+import { codeQualityAnalyzer, type QualityIssue, type QualityMetrics, type QualitySuggestion } from "./code-quality-analyzer"
+import { deepCodeUnderstanding, type BestPracticeCheck, type CodePattern, type CodeUnderstanding, type FunctionInfo, type VariableInfo } from "./deep-code-understanding"
 import { unifiedAI } from "./unified-ai-service"
-import { deepCodeUnderstanding } from "./deep-code-understanding"
-import { codeQualityAnalyzer } from "./code-quality-analyzer"
 
 export interface CodeGenerationContext {
   currentFile: string
@@ -17,6 +17,7 @@ export interface ProjectContext {
   dependencies: Record<string, string>
   framework?: string
   style?: string
+  language?: string
 }
 
 export interface CodeCompletion {
@@ -177,7 +178,7 @@ ${code}
   }
 
   // 辅助方法
-  private buildCompletionPrompt(context: CodeGenerationContext, understanding: any): string {
+  private buildCompletionPrompt(context: CodeGenerationContext, understanding: CodeUnderstanding): string {
     return `作为智能代码补全助手,请根据以下上下文提供代码补全建议:
 
 文件: ${context.currentFile}
@@ -190,9 +191,9 @@ ${context.surroundingCode}
 \`\`\`
 
 代码分析:
-- 检测到的模式: ${understanding.patterns.map((p: any) => p.name).join(", ")}
+- 检测到的模式: ${understanding.patterns.map((p: CodePattern) => p.name).join(", ")}
 - 复杂度: ${understanding.complexity.cyclomatic}
-- 当前作用域的变量: ${understanding.structure.variables.map((v: any) => v.name).join(", ")}
+- 当前作用域的变量: ${understanding.structure.variables.map((v: VariableInfo) => v.name).join(", ")}
 
 请提供3-5个最相关的代码补全建议,每个建议包含:
 1. 代码片段
@@ -316,34 +317,34 @@ ${code}
     return "snippet"
   }
 
-  private calculateConfidence(understanding: any): number {
+  private calculateConfidence(understanding: CodeUnderstanding): number {
     let confidence = 0.7
 
     // 基于代码质量提升置信度
     if (understanding.complexity.cyclomatic < 10) confidence += 0.1
     if (understanding.patterns.length > 0) confidence += 0.1
-    if (understanding.bestPractices.filter((bp: any) => bp.passed).length > 5) confidence += 0.1
+    if (understanding.bestPractices.filter((bp: BestPracticeCheck) => bp.passed).length > 5) confidence += 0.1
 
     return Math.min(1, confidence)
   }
 
-  private generateRefactoringSuggestions(code: string, quality: any): string[] {
+  private generateRefactoringSuggestions(code: string, quality: QualityMetrics): string[] {
     const suggestions: string[] = []
 
-    quality.issues.forEach((issue: any) => {
+    quality.issues.forEach((issue: QualityIssue) => {
       if (issue.autoFixable) {
         suggestions.push(`修复: ${issue.message}`)
       }
     })
 
-    quality.suggestions.forEach((suggestion: any) => {
+    quality.suggestions.forEach((suggestion: QualitySuggestion) => {
       suggestions.push(suggestion.description)
     })
 
     return suggestions
   }
 
-  private identifyRefactoringOpportunities(understanding: any, quality: any): string[] {
+  private identifyRefactoringOpportunities(understanding: CodeUnderstanding, quality: QualityMetrics): string[] {
     const opportunities: string[] = []
 
     // 基于复杂度
@@ -352,15 +353,15 @@ ${code}
     }
 
     // 基于函数长度
-    understanding.structure.functions.forEach((func: any) => {
+    understanding.structure.functions.forEach((func: FunctionInfo) => {
       if (func.loc.end - func.loc.start > 50) {
         opportunities.push(`拆分长函数: ${func.name}`)
       }
     })
 
     // 基于质量问题
-    quality.issues.forEach((issue: any) => {
-      if (issue.severity === "error" || issue.severity === "warning") {
+    quality.issues.forEach((issue: QualityIssue) => {
+      if (issue.severity >= 7 || issue.type === "error" || issue.type === "warning") {
         opportunities.push(issue.message)
       }
     })
@@ -390,7 +391,7 @@ ${code}
     return map[level] || level
   }
 
-  private calculateImprovement(old: any, new_: any, goal: string): number {
+  private calculateImprovement(old: CodeUnderstanding, new_: CodeUnderstanding, goal: string): number {
     if (goal === "performance") {
       const oldComplexity = old.complexity.cyclomatic
       const newComplexity = new_.complexity.cyclomatic

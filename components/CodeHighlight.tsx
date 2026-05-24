@@ -90,7 +90,7 @@ export default function CodeHighlight({ code, language, showLineNumbers = true }
       {showLineNumbers && (
         <div className="absolute left-0 top-0 bottom-0 flex flex-col text-xs text-zinc-500 select-none pointer-events-none px-2 py-4">
           {lines.map((_, i) => (
-            <span key={i} className="leading-[1.5rem]">
+            <span key={i} className="leading-6">
               {i + 1}
             </span>
           ))}

@@ -4,10 +4,10 @@ export interface FrameworkGenerationRequest {
   requirements: {
     name: string
     functionality: string
-    props?: Record<string, any>
-    state?: Record<string, any>
+    props?: Record<string, unknown>
+    state?: Record<string, unknown>
     styling?: string
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 
@@ -526,7 +526,7 @@ const data = await ${this.toCamelCase(name)}Repository.findAll()
       .replace(/^_/, "")
   }
 
-  private generatePropsInterface(componentName: string, props: Record<string, any>): string {
+  private generatePropsInterface(componentName: string, props: Record<string, unknown>): string {
     if (Object.keys(props).length === 0) {
       return `interface ${componentName}Props {
   className?: string
@@ -546,7 +546,7 @@ ${propsString}
 }`
   }
 
-  private generateStateHooks(state: Record<string, any>): string {
+  private generateStateHooks(state: Record<string, unknown>): string {
     if (Object.keys(state).length === 0) {
       return "  // 状态管理\n  const [data, setData] = useState<any>(null)"
     }
@@ -596,12 +596,12 @@ ${propsString}
 `
   }
 
-  private inferType(value: any): string {
+  private inferType(value: unknown): string {
     if (Array.isArray(value)) {
       return "any[]"
     }
     if (typeof value === "object" && value !== null) {
-      return "Record<string, any>"
+      return "Record<string, unknown>"
     }
     return typeof value
   }
@@ -613,7 +613,7 @@ ${propsString}
       boolean: "BOOLEAN",
       Date: "TIMESTAMP",
       "any[]": "JSONB",
-      "Record<string, any>": "JSONB",
+      "Record<string, unknown>": "JSONB",
     }
     return typeMap[tsType] || "TEXT"
   }

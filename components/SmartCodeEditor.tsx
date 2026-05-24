@@ -19,9 +19,11 @@ interface SmartCodeEditorProps {
 }
 
 const DEFAULT_FILE: CodeFile = {
+  id: "default",
   name: "untitled.txt",
   language: "text",
   content: "",
+  path: "/untitled.txt",
 }
 
 export default function SmartCodeEditor({
@@ -275,7 +277,7 @@ export default function SmartCodeEditor({
               onChange={handleChange}
               onKeyDown={handleKeyDown}
               readOnly={readOnly}
-              className="h-full w-full resize-none bg-transparent px-4 py-3 font-mono text-sm leading-6 text-zinc-900 outline-none dark:text-zinc-100"
+              className="h-full w-full resize-none bg-transparent px-4 py-3 font-mono text-sm leading-6 text-zinc-900 outline-hidden dark:text-zinc-100"
               spellCheck={false}
               placeholder="在此输入代码... (Ctrl/Cmd + Space 触发 AI 补全)"
             />

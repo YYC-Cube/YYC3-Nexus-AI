@@ -63,7 +63,7 @@ export class CodeExecutor {
 
       // 执行代码
       if (this.iframe?.contentWindow) {
-        this.iframe.contentWindow.eval(wrappedCode)
+        ;(this.iframe.contentWindow as unknown as { eval: (code: string) => void }).eval(wrappedCode)
       }
 
       // 等待执行完成

@@ -127,7 +127,7 @@ class EmotionalInteractionEngine {
   }
 
   // 心理学驱动的情感识别
-  async recognizeEmotion(userInput: string, context?: any): Promise<EmotionalState> {
+  async recognizeEmotion(userInput: string, context?: Record<string, unknown>): Promise<EmotionalState> {
     // 使用NLU进行情感分析
     const nluResult = await nlu.understand(userInput, context)
 

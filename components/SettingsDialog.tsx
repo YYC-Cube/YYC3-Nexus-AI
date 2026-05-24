@@ -86,29 +86,19 @@ export default function SettingsDialog({ open, onOpenChange }: SettingsDialogPro
   }
 
   const handleThemeChange = (theme: "light" | "dark" | "system") => {
-    console.log("[v0] Changing theme to:", theme)
-    const success = authManager.updatePreferences({ theme })
-    console.log("[v0] Theme update success:", success)
-    if (success) {
-      applyTheme(theme)
-    }
+    authManager.updatePreferences({ theme })
+    applyTheme(theme)
   }
 
   const handleProfileSave = () => {
     if (!user) return
 
-    console.log("[v0] Saving profile:", { name: profileName, avatar: profileAvatar })
-
-    const success = authManager.updateUser({
+    authManager.updateUser({
       name: profileName,
       avatar: profileAvatar || undefined,
     })
 
-    console.log("[v0] Profile update success:", success)
-
-    if (success) {
-      setActiveSection(null)
-    }
+    setActiveSection(null)
   }
 
   if (!user) {

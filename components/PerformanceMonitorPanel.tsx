@@ -87,7 +87,7 @@ export default function PerformanceMonitorPanel() {
             <div className="text-center">
               <Activity className="h-16 w-16 mx-auto mb-4 opacity-30" />
               <p className="mb-2">性能监控未启动</p>
-              <p className="text-sm">点击"开始监控"按钮开始收集性能数据</p>
+              <p className="text-sm">点击&ldquo;开始监控&rdquo;按钮开始收集性能数据</p>
             </div>
           </div>
         ) : (

@@ -231,7 +231,7 @@ class EmotionalIntelligence {
   }
 
   // 生成主动关怀消息
-  generateProactiveCare(timeSinceLastInteraction: number, recentActivity: any[]): string | null {
+  generateProactiveCare(timeSinceLastInteraction: number, recentActivity: Array<{ type: string; timestamp: Date }>): string | null {
     // 超过5分钟无互动
     if (timeSinceLastInteraction > 5 * 60 * 1000) {
       return "是不是在代码调试中遇到难题了?可以把遇到的问题发给我,咱们一起解决"

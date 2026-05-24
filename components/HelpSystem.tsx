@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge"
 import { HelpCircle, Book, Keyboard, Video, MessageCircle, Search, ExternalLink } from "lucide-react"
 import { useLocale } from "@/contexts/LocaleContext"
 
-export default function HelpSystem() {
+export default function HelpSystem({ onClose }: { onClose?: () => void } = {}) {
   const { t } = useLocale()
   const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -166,7 +166,7 @@ export default function HelpSystem() {
                   <div className="grid grid-cols-2 gap-3">
                     <div className="text-sm">
                       <p className="font-medium">AI 对话</p>
-                      <p className="text-xs text-zinc-500">与AI助手对话交流</p>
+                      <p className="text-xs text-zinc-500">与 NexusAI 对话交流</p>
                     </div>
                     <div className="text-sm">
                       <p className="font-medium">代码工作台</p>

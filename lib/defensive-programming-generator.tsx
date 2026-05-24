@@ -62,7 +62,7 @@ export class DefensiveProgrammingGenerator {
     const finalCode = await this.addFailureRecovery(resourceManagedCode, request)
 
     // 第六步：安全分析
-    const securityAnalysis = await this.analyzeSecuri(finalCode, request)
+    const securityAnalysis = await this.analyzeSecurity(finalCode, request)
 
     // 第七步：错误处理覆盖分析
     const errorHandlingCoverage = this.analyzeErrorHandling(finalCode, request)

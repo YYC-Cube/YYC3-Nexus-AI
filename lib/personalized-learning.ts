@@ -446,7 +446,7 @@ class PersonalizedLearningSystem {
     try {
       const data = localStorage.getItem("study-sessions")
       if (data) {
-        this.sessions = JSON.parse(data).map((s: any) => ({
+        this.sessions = JSON.parse(data).map((s: Record<string, unknown>) => ({
           ...s,
           startTime: new Date(s.startTime),
           endTime: s.endTime ? new Date(s.endTime) : undefined,

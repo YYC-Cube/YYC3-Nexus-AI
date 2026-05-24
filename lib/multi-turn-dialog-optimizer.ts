@@ -17,7 +17,7 @@ export interface ProgressiveGenerationPlan {
   goalDescription: string
   steps: DialogStep[]
   currentStepIndex: number
-  accumulatedContext: Record<string, any>
+  accumulatedContext: Record<string, unknown>
   generatedArtifacts: {
     design?: string
     architecture?: string
@@ -70,7 +70,7 @@ class MultiTurnDialogOptimizer {
   ): Promise<{
     nextStep?: DialogStep
     completed: boolean
-    artifacts?: any
+    artifacts?: unknown
   }> {
     const plan = this.activePlans.get(planId)
     if (!plan) {
@@ -333,8 +333,8 @@ ${response}
     plan.accumulatedContext[`${step.phase}_response`] = response
   }
 
-  private extractEntities(text: string): Array<{ key: string; value: any }> {
-    const entities: Array<{ key: string; value: any }> = []
+  private extractEntities(text: string): Array<{ key: string; value: unknown }> {
+    const entities: Array<{ key: string; value: unknown }> = []
 
     // 提取技术栈
     const techMatch = text.match(/\b(React|Vue|Angular|Node\.js|TypeScript|JavaScript)\b/gi)
@@ -428,7 +428,7 @@ src/
 代码已准备好进行最终审查。`
   }
 
-  private finalizeGeneration(plan: ProgressiveGenerationPlan): any {
+  private finalizeGeneration(plan: ProgressiveGenerationPlan): Record<string, unknown> {
     return {
       completed: true,
       artifacts: {
@@ -447,7 +447,7 @@ src/
     }
   }
 
-  private generateDataModels(context: Record<string, any>): string {
+  private generateDataModels(context: Record<string, unknown>): string {
     return `interface User {
   id: number
   name: string
@@ -464,7 +464,7 @@ interface Post {
 }`
   }
 
-  private generateRelationships(context: Record<string, any>): string {
+  private generateRelationships(context: Record<string, unknown>): string {
     return `- User 与 Post 是一对多关系
 - 每个 Post 必须关联一个 User（authorId）`
   }

@@ -23,59 +23,31 @@ export interface AuthState {
   isLoading: boolean
 }
 
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(password)
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("")
+}
+
+function generateId(): string {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID()
+  }
+  return Date.now().toString(36) + Math.random().toString(36).slice(2)
+}
+
 class AuthManager {
   private user: User | null = null
   private listeners: Set<(user: User | null) => void> = new Set()
 
   constructor() {
-    this.loadUser()
-    this.initializeAdminAccount()
-  }
-
-  private initializeAdminAccount(): void {
-    const adminEmail = "admin@0379.email"
-    const adminPassword = "123456"
-
-    try {
-      // 检查是否已存在管理员账号
-      const existingAdmin = localStorage.getItem(`user_${adminEmail}`)
-      if (!existingAdmin) {
-        // 创建管理员凭证
-        localStorage.setItem(
-          `user_${adminEmail}`,
-          JSON.stringify({
-            email: adminEmail,
-            password: adminPassword,
-          }),
-        )
-
-        // 创建管理员用户数据
-        const adminUser: User = {
-          id: "admin_001",
-          email: adminEmail,
-          name: "系统管理员",
-          avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=admin",
-          plan: "pro",
-          createdAt: new Date("2024-01-01"),
-          preferences: {
-            language: "zh-CN",
-            theme: "system",
-            aiModel: "deepseek",
-            notifications: true,
-          },
-        }
-
-        // 保存管理员用户数据到单独的键
-        localStorage.setItem(`user_data_${adminEmail}`, JSON.stringify(adminUser))
-
-        console.log("[v0] Admin account initialized:", adminEmail)
-      }
-    } catch (error) {
-      console.error("[v0] Failed to initialize admin account:", error)
+    if (typeof window !== "undefined") {
+      this.loadUser()
     }
   }
 
-  // 加载用户信息
   private loadUser(): void {
     try {
       const savedUser = localStorage.getItem("user")
@@ -83,12 +55,13 @@ class AuthManager {
         this.user = JSON.parse(savedUser)
         this.notifyListeners()
       }
-    } catch (error) {
-      console.error("[v0] Failed to load user:", error)
+    } catch {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("user")
+      }
     }
   }
 
-  // 保存用户信息
   private saveUser(): void {
     try {
       if (this.user) {
@@ -96,26 +69,22 @@ class AuthManager {
       } else {
         localStorage.removeItem("user")
       }
-    } catch (error) {
-      console.error("[v0] Failed to save user:", error)
+    } catch {
+      localStorage.removeItem("user")
     }
   }
 
-  // 注册用户
   async register(email: string, password: string, name: string): Promise<{ success: boolean; error?: string }> {
     try {
-      // 模拟API调用
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      // 检查邮箱是否已存在
       const existingUser = localStorage.getItem(`user_${email}`)
       if (existingUser) {
         return { success: false, error: "该邮箱已被注册" }
       }
 
-      // 创建新用户
       const newUser: User = {
-        id: Math.random().toString(36).slice(2),
+        id: generateId(),
         email,
         name,
         plan: "free",
@@ -128,21 +97,19 @@ class AuthManager {
         },
       }
 
-      // 保存用户凭证
-      localStorage.setItem(`user_${email}`, JSON.stringify({ email, password }))
+      const hashedPassword = await hashPassword(password)
+      localStorage.setItem(`user_${email}`, JSON.stringify({ email, passwordHash: hashedPassword }))
 
-      // 设置当前用户
       this.user = newUser
       this.saveUser()
       this.notifyListeners()
 
       return { success: true }
-    } catch (error) {
+    } catch {
       return { success: false, error: "注册失败,请稍后重试" }
     }
   }
 
-  // 登录
   async login(email: string, password: string): Promise<{ success: boolean; error?: string }> {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -153,17 +120,23 @@ class AuthManager {
       }
 
       const credentials = JSON.parse(savedCredentials)
-      if (credentials.password !== password) {
+      const hashedInput = await hashPassword(password)
+
+      if (credentials.passwordHash && credentials.passwordHash !== hashedInput) {
         return { success: false, error: "密码错误" }
+      }
+
+      if (!credentials.passwordHash && credentials.password === password) {
+        const hashedPassword = await hashPassword(password)
+        localStorage.setItem(`user_${email}`, JSON.stringify({ email, passwordHash: hashedPassword }))
       }
 
       const savedUserData = localStorage.getItem(`user_data_${email}`)
       if (savedUserData) {
         this.user = JSON.parse(savedUserData)
       } else {
-        // 如果没有保存的用户数据，创建默认数据
         this.user = {
-          id: Math.random().toString(36).slice(2),
+          id: generateId(),
           email,
           name: email.split("@")[0],
           plan: "free",
@@ -175,7 +148,6 @@ class AuthManager {
             notifications: true,
           },
         }
-        // 保存用户数据
         localStorage.setItem(`user_data_${email}`, JSON.stringify(this.user))
       }
 
@@ -183,7 +155,7 @@ class AuthManager {
       this.notifyListeners()
 
       return { success: true }
-    } catch (error) {
+    } catch {
       return { success: false, error: "登录失败,请稍后重试" }
     }
   }
@@ -215,15 +187,11 @@ class AuthManager {
 
   // 更新用户偏好
   updatePreferences(preferences: Partial<UserPreferences>): void {
-    console.log("[v0] Updating preferences:", preferences)
     if (this.user) {
       this.user.preferences = { ...this.user.preferences, ...preferences }
       this.saveUser()
-      // 同步更新到用户数据存储
       if (this.user.email) {
-        const userDataKey = `user_data_${this.user.email}`
-        localStorage.setItem(userDataKey, JSON.stringify(this.user))
-        console.log("[v0] Preferences saved to:", userDataKey)
+        localStorage.setItem(`user_data_${this.user.email}`, JSON.stringify(this.user))
       }
       this.notifyListeners()
     }
@@ -283,7 +251,7 @@ class AuthManager {
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
       const mockOAuthUser: User = {
-        id: Math.random().toString(36).slice(2),
+        id: generateId(),
         email: `user_${provider}@example.com`,
         name: `${provider.charAt(0).toUpperCase() + provider.slice(1)} User`,
         avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${provider}`,

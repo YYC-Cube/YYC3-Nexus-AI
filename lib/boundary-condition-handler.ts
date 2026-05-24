@@ -88,7 +88,7 @@ export class BoundaryConditionHandler {
   private generateNullHandling(request: BoundaryConditionRequest): HandledCondition {
     const code = `
 // 空输入处理
-function validateInput(input: any): void {
+function validateInput(input: unknown): void {
   if (input === null || input === undefined) {
     throw new Error('输入不能为null或undefined');
   }
@@ -136,7 +136,7 @@ function validateRange(value: number, min: number, max: number): void {
   }
 }
 
-function validateArraySize(array: any[], maxSize: number): void {
+function validateArraySize(array: unknown[], maxSize: number): void {
   if (array.length > maxSize) {
     throw new Error(\`数组大小\${array.length}超过限制\${maxSize}\`);
   }

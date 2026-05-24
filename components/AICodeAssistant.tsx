@@ -165,7 +165,7 @@ export default function AICodeAssistant({ currentCode, currentLanguage, onCodeGe
                     ? "留空以解释整个代码,或指定要解释的部分"
                     : "描述遇到的错误或问题..."
             }
-            className="w-full resize-none rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-sm outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+            className="w-full resize-none rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-sm outline-hidden focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 dark:border-zinc-700 dark:bg-zinc-950"
             rows={4}
             disabled={isGenerating}
           />

@@ -67,7 +67,7 @@ export default function ShareDialog({ isOpen, onClose, projectName, files }: Sha
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="简要描述这个项目..."
-                  className="w-full resize-none rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                  className="w-full resize-none rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-sm outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-950"
                   rows={3}
                 />
               </div>
@@ -111,7 +111,7 @@ export default function ShareDialog({ isOpen, onClose, projectName, files }: Sha
                     value={settings.password || ""}
                     onChange={(e) => setSettings({ ...settings, password: e.target.value || undefined })}
                     placeholder="留空表示公开访问"
-                    className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                    className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-950"
                   />
                 </div>
 
@@ -131,7 +131,7 @@ export default function ShareDialog({ isOpen, onClose, projectName, files }: Sha
                     placeholder="不限制"
                     min="1"
                     max="100"
-                    className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-950"
+                    className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-950"
                   />
                 </div>
               </div>

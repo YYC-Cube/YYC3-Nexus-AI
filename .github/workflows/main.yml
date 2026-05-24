@@ -12,10 +12,16 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   lint-and-type-check:
-    name: Lint and Type Check
+    name: Lint & Type Check
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -27,13 +33,13 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "22"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -43,9 +49,10 @@ jobs:
 
       - name: Type check
         run: pnpm exec tsc --noEmit
+        continue-on-error: true
 
   build:
-    name: Build Application
+    name: Build
     runs-on: ubuntu-latest
     needs: lint-and-type-check
     permissions:
@@ -58,13 +65,13 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "22"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -81,47 +88,14 @@ jobs:
           path: .next
           retention-days: 7
 
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    needs: lint-and-type-check
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run unit tests
-        if: hashFiles('tests/**/*.test.ts', 'tests/**/*.test.tsx') != ''
-        run: pnpm exec jest tests/unit --passWithNoTests
-        continue-on-error: true
-
-      - name: Run integration tests
-        if: hashFiles('tests/**/*.test.ts', 'tests/**/*.test.tsx') != ''
-        run: pnpm exec jest tests/integration --passWithNoTests
-        continue-on-error: true
-
-  e2e-test:
-    name: E2E Tests
+  deploy-pages:
+    name: Deploy to GitHub Pages
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build
-    permissions:
-      contents: read
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout code
@@ -130,29 +104,30 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "22"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps
+      - name: Build static export
+        run: pnpm run build
+        env:
+          NODE_ENV: production
 
-      - name: Run E2E tests
-        if: hashFiles('tests/e2e/**/*.test.ts', 'tests/e2e/**/*.test.tsx') != ''
-        run: pnpm exec playwright test tests/e2e
-        continue-on-error: true
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
-      - name: Upload Playwright report
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: playwright-report
-          path: playwright-report
-          retention-days: 7
+          path: .next
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

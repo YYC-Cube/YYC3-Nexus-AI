@@ -149,9 +149,9 @@ class AIIntegrationBridge {
     code: string,
     language: string,
   ): Promise<{
-    result: any
+    result: unknown
     analysis: CodeAnalysisResult
-    learningProgress: any
+    learningProgress
   }> {
     // 分析代码
     const analysis = await this.analyzeCodeForLearning(code, language)
@@ -159,7 +159,7 @@ class AIIntegrationBridge {
     // 执行代码
     let result
     try {
-      result = await codeExecutor.execute(code, language)
+      result = await codeExecutor.executeJavaScript(code)
 
       // 记录成功执行
       learningTracker.recordNode({
@@ -168,7 +168,7 @@ class AIIntegrationBridge {
         mastery: 0.8,
         timestamp: new Date().toISOString(),
       })
-    } catch (error: any) {
+    } catch (error: Error | unknown) {
       // 记录错误
       learningTracker.recordError({
         topic: `${language} 编程`,

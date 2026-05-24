@@ -6,14 +6,14 @@ export interface APIDocumentation {
   parameters: APIParameter[]
   requestBody?: {
     type: string
-    properties: Record<string, any>
+    properties: Record<string, unknown>
     required: string[]
   }
   responses: {
     [statusCode: string]: {
       description: string
-      schema?: any
-      example?: any
+      schema?: Record<string, unknown>
+      example?: unknown
     }
   }
   examples: APIExample[]
@@ -28,8 +28,8 @@ export interface APIParameter {
   schema: {
     type: string
     format?: string
-    enum?: any[]
-    default?: any
+    enum?: unknown[]
+    default?: unknown
   }
 }
 
@@ -37,11 +37,11 @@ export interface APIExample {
   title: string
   request: {
     headers?: Record<string, string>
-    body?: any
+    body?: unknown
   }
   response: {
     status: number
-    body: any
+    body: unknown
   }
 }
 
@@ -59,7 +59,7 @@ export interface ComponentProp {
   name: string
   type: string
   required: boolean
-  default?: any
+  default?: unknown
   description: string
 }
 

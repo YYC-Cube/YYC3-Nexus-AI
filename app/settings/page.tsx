@@ -341,7 +341,7 @@ export default function SettingsPage() {
           </div>
 
           {user.plan !== "pro" && (
-            <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div className="p-4 bg-linear-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 rounded-lg border border-blue-200 dark:border-blue-800">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="font-medium">升级到Pro版本</div>
