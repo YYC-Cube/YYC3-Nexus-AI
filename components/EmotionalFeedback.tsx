@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Heart, TrendingUp, Sparkles, Award } from "lucide-react"
 import { emotionalIntelligence, type EmotionalState, type ProgressComparison } from "@/lib/emotional-intelligence"
 
@@ -27,7 +27,11 @@ export default function EmotionalFeedback({ messages, recentErrors, sessionDurat
     // 生成数据化鼓励
     const comparisons = emotionalIntelligence.generateDataDrivenEncouragement()
     setProgressComparisons(comparisons)
-  }
+  }, [messages, recentErrors, sessionDuration])
+
+  useEffect(() => {
+    analyzeEmotion()
+  }, [analyzeEmotion])
 
   if (!emotionalState) return null
 
