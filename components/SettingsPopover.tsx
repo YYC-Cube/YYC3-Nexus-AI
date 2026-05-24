@@ -81,11 +81,11 @@ export default function SettingsPopover({ children }) {
   }, [])
 
   const handleLanguageChange = (newLocale: string) => {
-    setLocale(newLocale: string)
+    setLocale(newLocale)
     setShowLanguage(false)
   }
 
-  const handleCategoryChange = (category, value) => {
+  const handleCategoryChange = (category: string, value: string | boolean) => {
     setPromptCategories((prev) => ({
       ...prev,
       [category]: value,
